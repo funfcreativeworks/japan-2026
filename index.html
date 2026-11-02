@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Japan 2026: Stan & Alfiya — Master 19-Day Route Map</title>
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-surface: #0b1120;
+      --bg-panel: rgba(15, 23, 42, 0.95);
+      --bg-card: #1e293b;
+      --border-color: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-red: #f43f5e;
+      --accent-amber: #f59e0b;
+      --accent-blue: #38bdf8;
+      --accent-green: #10b981;
+      --accent-purple: #c084fc;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      background: var(--bg-surface);
+      color: var(--text-main);
+    }
+
+    #map {
+      flex: 1;
+      height: 100%;
+      background: #020617;
+    }
+
+    /* SIDEBAR */
+    #sidebar {
+      width: 460px;
+      height: 100%;
+      background: var(--bg-panel);
+      backdrop-filter: blur(14px);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      box-shadow: 6px 0 28px rgba(0,0,0,0.45);
+    }
+
+    .header {
+      padding: 18px 20px 14px;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(11, 17, 32, 0.98);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 9999px;
+      background: rgba(244, 63, 94, 0.15);
+      color: var(--accent-red);
+      border: 1px solid rgba(244, 63, 94, 0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    /* CONTROLS */
+    .controls {
+      padding: 10px 18px;
+      background: rgba(15, 23, 42, 0.7);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-all {
+      flex: 1;
+      background: #334155;
+      color: #fff;
+      border: 1px solid #475569;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-all:hover {
+      background: #475569;
+      transform: translateY(-1px);
+    }
+
+    /* DAY LIST */
+    .day-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .day-list::-webkit-scrollbar { width: 6px; }
+    .day-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+    .day-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .day-card:hover {
+      border-color: #64748b;
+      transform: translateX(2px);
+    }
+    .day-card.active {
+      border-color: var(--accent-red);
+      background: rgba(244, 63, 94, 0.08);
+      box-shadow: 0 0 15px rgba(244, 63, 94, 0.2);
+    }
+
+    .day-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 5px;
+    }
+    .day-number {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-amber);
+    }
+    .day-date {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+    .day-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    /* TIMELINE */
+    .day-timeline {
+      display: none;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #334155;
+    }
+    .day-card.active .day-timeline {
+      display: block;
+    }
+
+    .timeline-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: #cbd5e1;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+    .timeline-step:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+    .step-idx {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: var(--accent-red);
+      color: #fff;
+      font-weight: 700;
+      font-size: 11px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-idx.hotel { background: var(--accent-amber); }
+    .step-idx.transit { background: var(--accent-blue); }
+    .step-idx.onsen { background: var(--accent-green); }
+    .step-idx.special { background: var(--accent-purple); }
+
+    .step-details {
+      display: flex;
+      flex-direction: column;
+    }
+    .step-name {
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+    .step-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* MAP LEGEND OVERLAY */
+    .map-legend {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      background: var(--bg-panel);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-color);
+      padding: 14px 16px;
+      border-radius: 12px;
+      z-index: 1000;
+      max-width: 290px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      font-size: 12px;
+    }
+    .legend-title {
+      font-weight: 700;
+      font-size: 12px;
+      color: #fff;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 7px;
+      color: #cbd5e1;
+    }
+    .legend-item:last-child { margin-bottom: 0; }
+    .legend-badge {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+    }
+
+    /* CUSTOM NUMBERED PINS */
+    .step-marker {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      border: 2px solid #fff;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.6);
+      transition: transform 0.2s;
+    }
+    .step-marker:hover {
+      transform: scale(1.3);
+    }
+    .marker-poi { background: var(--accent-red); }
+    .marker-hotel { background: var(--accent-amber); border-color: #fef3c7; }
+    .marker-transit { background: var(--accent-blue); }
+    .marker-onsen { background: var(--accent-green); }
+    .marker-special { background: var(--accent-purple); }
+
+    /* LEAFLET POPUP OVERRIDES */
+    .leaflet-popup-content-wrapper {
+      background: #0f172a !important;
+      color: #f8fafc !important;
+      border: 1px solid var(--border-color);
+      border-radius: 10px !important;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6) !important;
+      padding: 4px;
+    }
+    .leaflet-popup-tip { background: #0f172a !important; }
+    .popup-title {
+      font-weight: 700;
+      font-size: 13.5px;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .popup-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+    .popup-desc {
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div class="header">
+      <span class="badge">Master Plan (Oct 30 Revision)</span>
+      <h1 class="title">Stan & Alfiya's Japan 2026</h1>
+      <p class="subtitle">Booked: UA131 (HND In) / UA804 (HND Out 16:50) · 5 Bases · Kyoto 8n, Hakone 2n, Shinjuku 4n</p>
+    </div>
+
+    <div class="controls">
+      <button class="btn-all" onclick="showMacroOverview()">🗺️ View Complete Macro Corridor (5 Regional Bases)</button>
+    </div>
+
+    <div class="day-list" id="dayCardsContainer">
+      <!-- Generated automatically by JS -->
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div id="map"></div>
+
+  <!-- FLOATING LEGEND -->
+  <div class="map-legend">
+    <div class="legend-title">
+      <span>ROUTE LEGEND</span>
+      <span style="color:var(--text-muted); font-size:10px;">MASTER PLAN</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-badge" style="background:#f43f5e; height:3px; border-radius:1px;"></div>
+      <span>Selected Day Connected Route</span>
+    </div>
+    <div class="legend-item">
+      <div class="step-marker marker-hotel" style="width:16px; height:16px; font-size:9px; border-width:1px;">★</div>
+      <span>Accommodations / Overnight Base</span>
+    </div>
+    <div class="legend-item">
+      <div class="step-marker marker-special" style="width:16px; height:16px; font-size:9px; border-width:1px;">★</div>
+      <span>Highlights (Kimono, Tea, Batto, Owls, Art)</span>
+    </div>
+    <div class="legend-item">
+      <div class="step-marker marker-poi" style="width:16px; height:16px; font-size:9px; border-width:1px;">1</div>
+      <span>Sequential Sights & Castles</span>
+    </div>
+    <div class="legend-item">
+      <div class="step-marker marker-transit" style="width:16px; height:16px; font-size:9px; border-width:1px;">🚅</div>
+      <span>Station / Airport Transfer</span>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    // ==========================================
+    // 100% FREE TILE LAYERS (NO API KEY NEEDED)
+    // ==========================================
+    const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    });
+
+    const esriStreetLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 19,
+      attribution: 'Tiles &copy; Esri'
+    });
+
+    const esriTopoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 19,
+      attribution: 'Tiles &copy; Esri'
+    });
+
+    const esriSatLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 19,
+      attribution: 'Tiles &copy; Esri'
+    });
+
+    const map = L.map('map', {
+      layers: [osmLayer],
+      zoomControl: false
+    }).setView([35.6895, 137.5], 7);
+
+    L.control.layers({
+      "OpenStreetMap (Clear)": osmLayer,
+      "Esri Street": esriStreetLayer,
+      "Esri Topographic (Alps)": esriTopoLayer,
+      "Esri Satellite": esriSatLayer
+    }, null, { position: 'topright' }).addTo(map);
+
+    L.control.zoom({ position: 'topright' }).addTo(map);
+
+    // ==========================================
+    // COMPLETE 19-DAY MASTER ITINERARY DATA
+    // Validated against Oct 30 Master Schedule:
+    // Tokyo Asakusa (2n) -> Kanazawa (2n) -> Kyoto (8n) -> Hakone (2n) -> Tokyo Shinjuku (4n)
+    // ==========================================
+    const itinerary = [
+      {
+        day: 1,
+        date: "Wed Nov 25, 2026",
+        title: "Tokyo Arrival & Asakusa Settle-in",
+        base: "Base 1: Asakusa, Tokyo (Night 1 of 2)",
+        steps: [
+          { name: "Haneda Airport (HND)", lat: 35.5494, lng: 139.7798, type: "transit", desc: "UA131 lands 14:20. Get yen, set up Suica. Keikyu Access Express to Asakusa (~40m, ¥610)." },
+          { name: "Asakusa Hotel Base", lat: 35.7126, lng: 139.7966, type: "hotel", desc: "Check in to Asakusa hotel base." },
+          { name: "Kaminarimon & Nakamise-dōri", lat: 35.7111, lng: 139.7964, type: "poi", desc: "Evening stroll through lantern gates as crowds clear out." },
+          { name: "Sensō-ji Temple (Illuminated)", lat: 35.7148, lng: 139.7967, type: "poi", desc: "Sensō-ji lit up at night. Udon or tempura dinner in Asakusa." },
+          { name: "Asakusa Base", lat: 35.7126, lng: 139.7966, type: "hotel", desc: "Night 1 in Asakusa." }
+        ]
+      },
+      {
+        day: 2,
+        date: "Thu Nov 26, 2026",
+        title: "Sensō-ji, Shinjuku Gyōen, Owls, Akihabara & Ueno",
+        base: "Base 1: Asakusa, Tokyo (Night 2 of 2)",
+        steps: [
+          { name: "Asakusa Base", lat: 35.7126, lng: 139.7966, type: "hotel", desc: "Morning start from Asakusa hotel." },
+          { name: "Sensō-ji (Early)", lat: 35.7148, lng: 139.7967, type: "poi", desc: "Crowd-free early morning walk through the ancient temple grounds." },
+          { name: "Shinjuku Gyōen National Garden", lat: 35.6852, lng: 139.7100, type: "poi", desc: "Morning autumn foliage walk: golden ginkgos & vibrant red Japanese maples (opens 09:00, ¥500)." },
+          { name: "Akiba Fukurou Owl Cafe", lat: 35.6997, lng: 139.7744, type: "special", desc: "🦉 Direct JR Chūō-Sōbu train to Akihabara for your timed reservation to meet and hold gentle owls." },
+          { name: "Akihabara (Super Potato)", lat: 35.6990, lng: 139.7710, type: "poi", desc: "Multi-floor retro video game museum & vintage gaming cartridges right around the corner." },
+          { name: "Ueno Park & Shinobazu Pond", lat: 35.7141, lng: 139.7741, type: "poi", desc: "Late afternoon stroll through wide tree promenades and historic lotus pond." },
+          { name: "Asakusa Base", lat: 35.7126, lng: 139.7966, type: "hotel", desc: "Quick direct 5-minute Ginza Line ride back to Asakusa for dinner. Night 2 in Asakusa." }
+        ]
+      },
+      {
+        day: 3,
+        date: "Fri Nov 27, 2026",
+        title: "Kanazawa Arrival, Kimono & Ninja-dera (Birthday)",
+        base: "Base 2: Kanazawa Machiya (Night 1 of 2)",
+        steps: [
+          { name: "Tokyo Station", lat: 35.6812, lng: 139.7671, type: "transit", desc: "Kagayaki 503 (07:20 -> 09:44) through the Alps to Kanazawa." },
+          { name: "Kanazawa Station", lat: 36.5780, lng: 136.6478, type: "transit", desc: "Arrive 09:44. Drop bags." },
+          { name: "Ōmichō Market", lat: 36.5714, lng: 136.6563, type: "poi", desc: "~10:00 Kaisendon seafood sashimi bowl breakfast." },
+          { name: "Kokoyui Kimono Rental (心結)", lat: 36.5772, lng: 136.6502, type: "special", desc: "👘 ~11:00 Authentic Kaga Yūzen hand-dyed silk kimono dressing." },
+          { name: "Kenroku-en Garden", lat: 36.5621, lng: 136.6627, type: "poi", desc: "One of Japan's Top 3 gardens at autumn peak; yukitsuri rope cones." },
+          { name: "Higashi Chaya District", lat: 36.5725, lng: 136.6665, type: "poi", desc: "Hakuichi 24K gold-leaf soft-serve, matcha desserts & teahouse interior." },
+          { name: "Ninja-dera (Myōryū-ji)", lat: 36.5543, lng: 136.6501, type: "special", desc: "⚔️ Reservation-only temple tour with hidden trapdoors & trick staircases (drop if overloaded)." },
+          { name: "Kanazawa Machiya Base", lat: 36.5685, lng: 136.6575, type: "hotel", desc: "Return kimonos; birthday celebration dinner; check in to traditional machiya." }
+        ]
+      },
+      {
+        day: 4,
+        date: "Sat Nov 28, 2026",
+        title: "Shirakawa-go Farmhouses & Hida Folk Village Excursion",
+        base: "Base 2: Kanazawa Machiya (Night 2 of 2)",
+        steps: [
+          { name: "Kanazawa Bus Terminal", lat: 36.5780, lng: 136.6478, type: "transit", desc: "Nohi Bus 08:40 into the Alps to Shirakawa-go." },
+          { name: "Shirakawa-go (Ogimachi)", lat: 36.2586, lng: 136.9065, type: "poi", desc: "Arrive 10:05. Wada House (¥400), Shiroyama viewpoint, House of Pudding." },
+          { name: "Takayama Bus Terminal", lat: 36.1420, lng: 137.2580, type: "transit", desc: "Bus 12:35 -> Takayama 13:25. Taxi or Sarubobo Bus to Hida no Sato." },
+          { name: "Hida no Sato (Folk Village)", lat: 36.1326, lng: 137.2346, type: "poi", desc: "¥700 entry; four ICP houses, Shunkei lacquer, and ichii ittobori woodcarving." },
+          { name: "Kanazawa Machiya Base", lat: 36.5685, lng: 136.6575, type: "hotel", desc: "Return to Kanazawa (bus or train via Toyama). Optional Kenroku-en light-up (18:00–21:00)." }
+        ]
+      },
+      {
+        day: 5,
+        date: "Sun Nov 29, 2026",
+        title: "Train to Kyoto & Night Illumination",
+        base: "Base 3: Kyoto Higashiyama (Night 1 of 8)",
+        steps: [
+          { name: "Kanazawa Station", lat: 36.5780, lng: 136.6478, type: "transit", desc: "Shinkansen to Tsuruga, then Thunderbird to Kyoto (~2h10 total)." },
+          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Check in to historic Higashiyama preservation district base (8-night home anchor!)." },
+          { name: "Ninenzaka & Sannenzaka", lat: 34.9985, lng: 135.7800, type: "poi", desc: "Cobblestone lanes framed by traditional wooden machiya." },
+          { name: "Yasaka Pagoda (Hōkan-ji)", lat: 34.9985, lng: 135.7797, type: "poi", desc: "Kyoto postcard sunset glow against the 5-story pagoda." },
+          { name: "Kiyomizu-dera Night Illumination", lat: 34.9949, lng: 135.7850, type: "special", desc: "Massive wooden stage hovering over illuminated sea of glowing red maples." },
+          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Night 1 in Kyoto." }
+        ]
+      },
+      {
+        day: 6,
+        date: "Mon Nov 30, 2026",
+        title: "Arashiyama Bamboo & River Vistas",
+        base: "Base 3: Kyoto Higashiyama (Night 2 of 8)",
+        steps: [
+          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Randen tram / JR train west to Arashiyama." },
+          { name: "Togetsukyō Bridge", lat: 35.0129, lng: 135.6777, type: "poi", desc: "400-year-old wooden bridge framed by autumn peaks." },
+          { name: "Tenryū-ji Zen Temple", lat: 35.0158, lng: 135.6777, type: "poi", desc: "14th-century pond garden unchanged for 700 years." },
+          { name: "Arashiyama Bamboo Grove", lat: 35.0169, lng: 135.6712, type: "poi", desc: "Towering emerald green bamboo stalks." },
+          { name: "Iwatayama Monkey Park", lat: 35.0104, lng: 135.6766, type: "poi", desc: "Wild macaques & panoramic Kyoto basin vista (¥800, cash only)." },
+          { name: "Gion Shirakawa Canal", lat: 35.0055, lng: 135.7745, type: "poi", desc: "Willow-lined canal stroll; dinner at Tempura Endo Yasaka." },
+          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Night 2 in Kyoto." }
+        ]
+      },
+      {
+        day: 7,
+        date: "Tue Dec 1, 2026",
+        title: "Torii Climb, Golden Pavilion & Pontochō",
+        base: "Base 3: Kyoto Higashiyama (Night 3 of 8)",
+        steps: [
+          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Early start south." },
+          { name: "Fushimi Inari Taisha", lat: 34.9671, lng: 135.7727, type: "poi", desc: "Early climb through 10,000 vermilion torii gates winding up sacred Mount Inari." },
+          { name: "Kinkaku-ji (Golden Pavilion)", lat: 35.0394, lng: 135.7292, type: "poi", desc: "Kyoto City Bus #205 north to view pure gold leaf reflecting over pond." },
+          { name: "Pontochō Alley & Gion", lat: 35.0055, lng: 135.7710, type: "poi", desc: "Dinner in atmospheric narrow lantern lane (hot pot or Ohmi wagyu) & Gion walk." },
+          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Night 3 in Kyoto." }
+        ]
+      },
+      {
+        day: 8,
+        date: "Wed Dec 2, 2026",
+        title: "Nara Ancient Capital Day Trip",
+        base: "Base 3: Kyoto Higashiyama (Night 4 of 8)",
+        steps: [
+          { name: "Kyoto Station", lat: 34.9858, lng: 135.7588, type: "transit", desc: "JR Miyakoji Rapid to Nara (~45 min, ¥720)." },
+          { name: "Nakatanidou Yomogi Mochi", lat: 34.6818, lng: 135.8285, type: "poi", desc: "Watch high-speed mochi pounding demonstration; grab warm mochi." },
+          { name: "Nara Park Sika Deer", lat: 34.6850, lng: 135.8430, type: "poi", desc: "Meet sacred bowing wild deer in the park." },
+          { name: "Tōdai-ji (Great Buddha)", lat: 34.6890, lng: 135.8398, type: "poi", desc: "World-heritage colossal wooden hall housing 15m bronze Daibutsu." },
+          { name: "Kasuga Taisha Shrine", lat: 34.6814, lng: 135.8484, type: "poi", desc: "Primeval forest shrine lined with 3,000 stone and bronze lanterns." },
+          { name: "Naramachi Preservation District", lat: 34.6780, lng: 135.8305, type: "poi", desc: "Merchant street tea stroll before catching rapid train back to Kyoto." },
+          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Night 4 in Kyoto." }
+        ]
+      },
+      {
+        day: 9,
+        date: "Thu Dec 3, 2026",
+        title: "Osaka Street Food & Neon Day Trip",
+        base: "Base 3: Kyoto Higashiyama (Night 5 of 8)",
+        steps: [
+          { name: "Kyoto Station", lat: 34.9858, lng: 135.7588, type: "transit", desc: "Quick train to Osaka (15–30 min). Bags stay safely in Kyoto!" },
+          { name: "Dōtonbori Canal & Glico Sign", lat: 34.6687, lng: 135.5013, type: "poi", desc: "Pulsing neon street food haven: piping hot takoyaki & street life." },
+          { name: "Shinsekai & Tsūtenkaku Tower", lat: 34.6525, lng: 135.5063, type: "poi", desc: "Tsūtenkaku observation deck (¥1,500 timed ticket) & kushikatsu skewers dinner." },
+          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Return train to Kyoto for a comfortable night in your home base." }
+        ]
+      },
+      {
+        day: 10,
+        date: "Fri Dec 4, 2026",
+        title: "Uji Tea Capital & Philosopher's Path",
+        base: "Base 3: Kyoto Higashiyama (Night 6 of 8)",
+        steps: [
+          { name: "Kyoto Station", lat: 34.9858, lng: 135.7588, type: "transit", desc: "Short 20m train south to Uji." },
+          { name: "Byōdō-in Temple (Phoenix Hall)", lat: 34.8893, lng: 135.8077, type: "special", desc: "Arrive 09:10 for same-day Phoenix Hall interior tickets; matcha parfait." },
+          { name: "Philosopher's Path (Tetsugaku-no-Michi)", lat: 35.0235, lng: 135.7955, type: "poi", desc: "Peaceful afternoon stone canal stroll shaded by late autumn trees." },
+          { name: "Ginkaku-ji (Silver Pavilion)", lat: 35.0272, lng: 135.7982, type: "poi", desc: "¥1,000 entry: wabi-sabi dry sand cone, Zen architecture & moss garden." },
+          { name: "Kamogawa Riverbank Twilight", lat: 35.0035, lng: 135.7710, type: "poi", desc: "Sunset walk along the riverbanks; traditional Kyoto dinner." },
+          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Night 6 in Kyoto." }
+        ]
+      },
+      {
+        day: 11,
+        date: "Sat Dec 5, 2026",
+        title: "Himeji Castle Day Trip from Kyoto",
+        base: "Base 3: Kyoto Higashiyama (Night 7 of 8)",
+        steps: [
+          { name: "Kyoto Station", lat: 34.9858, lng: 135.7588, type: "transit", desc: "JR Special Rapid (07:14 -> 08:49, 95m, ¥2,210) or Shinkansen Hikari 731 (07:20 -> 08:03, 43m)." },
+          { name: "Himeji Castle (White Heron)", lat: 34.8394, lng: 134.6939, type: "poi", desc: "Japan's premier original 1609 feudal keep from 09:00 (¥2,500, or ¥2,600 with Kōko-en)." },
+          { name: "Kōko-en Garden", lat: 34.8385, lng: 134.6908, type: "poi", desc: "Nine distinct Edo-style walled garden ponds adjacent to the castle moat." },
+          { name: "Himeji Station", lat: 34.8275, lng: 134.6905, type: "transit", desc: "Return to Kyoto (Special Rapid 14:12 -> 15:44 or Hikari 712 14:11 -> 15:02)." },
+          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Forward big bags to Hakone ryokan via Yamato! Optional Eikan-dō evening light-up. Night 7." }
+        ]
+      },
+      {
+        day: 12,
+        date: "Sun Dec 6, 2026",
+        title: "Kinosaki Onsen Coastal Day Trip from Kyoto",
+        base: "Base 3: Kyoto Higashiyama (Night 8 of 8)",
+        steps: [
+          { name: "Kyoto Station", lat: 34.9858, lng: 135.7588, type: "transit", desc: "Kinosaki 5 (11:25 -> 13:49, ¥5,370) direct through Tanba mountain valleys to the coast." },
+          { name: "Kinosaki Onsen Station", lat: 35.6248, lng: 134.8143, type: "transit", desc: "Arrive 13:49. Pack a daypack; no hotel move today!" },
+          { name: "Otani Willow Canal", lat: 35.6264, lng: 134.8125, type: "poi", desc: "Willow canal walk, Taiko-bashi arched stone bridges, hot crab croquette." },
+          { name: "Gosho-no-yu & Ichino-yu Public Baths", lat: 35.6268, lng: 134.8118, type: "onsen", desc: "Baths ~14:00–16:00: waterfall outdoor bath, cavern bath, and canal foot baths." },
+          { name: "Kinosaki Onsen Station (Return)", lat: 35.6248, lng: 134.8143, type: "transit", desc: "Kinosaki 20 direct (16:31 -> 19:07, ¥5,370) — last direct train back to Kyoto." },
+          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Dinner back in Kyoto. Final night (Night 8) in Kyoto." }
+        ]
+      },
+      {
+        day: 13,
+        date: "Mon Dec 7, 2026",
+        title: "Direct Shinkansen to Hakone Caldera",
+        base: "Base 4: Mountain Ryokan, Hakone (Night 1 of 2)",
+        steps: [
+          { name: "Kyoto Station", lat: 34.9858, lng: 135.7588, type: "transit", desc: "Hikari 642 direct (08:33 -> 10:38, 2h05, ¥12,100). Nozomi does not stop at Odawara." },
+          { name: "Odawara Station Hub", lat: 35.2562, lng: 139.1558, type: "transit", desc: "Pick up 2-day Hakone Freepass (¥6,000); Hakone Tozan railway up to Hakone-Yumoto (~11:20)." },
+          { name: "Hakone-Yumoto / Gōra Valley", lat: 35.2325, lng: 139.1050, type: "transit", desc: "Winding switchback mountain railway up the gorges." },
+          { name: "Hakone Rotemburo Ryokan Base", lat: 35.2496, lng: 139.0478, type: "hotel", desc: "Check in 15:00. Private open-air rotemburo bath, kaiseki dinner (Night 1)." }
+        ]
+      },
+      {
+        day: 14,
+        date: "Tue Dec 8, 2026",
+        title: "Hakone Caldera Loop, Black Eggs & Peace Torii",
+        base: "Base 4: Mountain Ryokan, Hakone (Night 2 of 2)",
+        steps: [
+          { name: "Hakone Ryokan Base", lat: 35.2496, lng: 139.0478, type: "hotel", desc: "Cable car to Sōunzan." },
+          { name: "Ōwakudani Volcanic Valley", lat: 35.2425, lng: 139.0195, type: "poi", desc: "Replacement bus (ropeway closed Dec 7–24). Smoking vents, Mt. Fuji & kuro-tamago black eggs." },
+          { name: "Lake Ashi Shoreline", lat: 35.2014, lng: 139.0306, type: "poi", desc: "Ropeway to Tōgendai; tranquil lakeshore walk (no pirate ship)." },
+          { name: "Hakone Shrine (Peace Torii)", lat: 35.2047, lng: 139.0257, type: "poi", desc: "Iconic submerged vermilion torii (visit early afternoon for 30–60m queue)." },
+          { name: "Hakone Ryokan Base", lat: 35.2496, lng: 139.0478, type: "hotel", desc: "Second evening private bath soak & kaiseki dinner (Night 2)." }
+        ]
+      },
+      {
+        day: 15,
+        date: "Wed Dec 9, 2026",
+        title: "Romancecar to Shinjuku & Shibuya Night",
+        base: "Base 5: Shinjuku, Tokyo (Night 1 of 4)",
+        steps: [
+          { name: "Hakone-Yumoto Station", lat: 35.2325, lng: 139.1050, type: "transit", desc: "Odakyu Romancecar straight to Shinjuku (~85–105 min, ¥2,420)." },
+          { name: "Shinjuku Hotel Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Check in to 4-night skyscraper base." },
+          { name: "Shibuya Crossing", lat: 35.6595, lng: 139.7005, type: "poi", desc: "5-minute hop to experience the world's busiest pedestrian crossing." },
+          { name: "Kabukichō & Omoide Yokochō", lat: 35.6932, lng: 139.6997, type: "poi", desc: "Lantern-lit yakitori skewers and crispy gyoza beside train tracks." },
+          { name: "Shinjuku Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Night 1 in Shinjuku." }
+        ]
+      },
+      {
+        day: 16,
+        date: "Thu Dec 10, 2026",
+        title: "HiSUi Cultural Salon & Sunset Shibuya Sky",
+        base: "Base 5: Shinjuku, Tokyo (Night 2 of 4)",
+        steps: [
+          { name: "Shinjuku Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Marunouchi Line 16 min to Ginza." },
+          { name: "HiSUi TOKYO (Ginza)", lat: 35.6708, lng: 139.7675, type: "special", desc: "⚔️ Tea ceremony ×2 + Batto (real-sword katana test-cutting) for Stan (~1h30, ¥44,000)." },
+          { name: "Shibuya Sky (Sunset Band)", lat: 35.6585, lng: 139.7013, type: "special", desc: "360° open-air rooftop observation deck in the sunset band (15:00+, ¥3,400/person)." },
+          { name: "Shinjuku Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Night 2 in Shinjuku." }
+        ]
+      },
+      {
+        day: 17,
+        date: "Fri Dec 11, 2026",
+        title: "Kamakura, Yokohama & teamLab Planets",
+        base: "Base 5: Shinjuku, Tokyo (Night 3 of 4)",
+        steps: [
+          { name: "Shinjuku Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Morning train south to Kamakura." },
+          { name: "Kōtoku-in (Great Buddha)", lat: 35.3168, lng: 139.5357, type: "poi", desc: "Enoden tram to 13th-century outdoor bronze Daibutsu." },
+          { name: "Komachi-dōri & Tsurugaoka Hachimangū", lat: 35.3260, lng: 139.5564, type: "poi", desc: "Giraffa crispy cheese curry pan & grand samurai shrine." },
+          { name: "Hōkoku-ji Bamboo Temple", lat: 35.3199, lng: 139.5694, type: "poi", desc: "Bamboo garden matcha tea (last order 15:30)." },
+          { name: "Yokohama Chinatown", lat: 35.4431, lng: 139.6455, type: "poi", desc: "Minato Mirai waterfront and early Chinatown dinner." },
+          { name: "teamLab Planets (Toyosu)", lat: 35.6491, lng: 139.7898, type: "special", desc: "✨ Evening timed slot: wade barefoot through crystal & water infinity art rooms." },
+          { name: "Shinjuku Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Night 3 in Shinjuku." }
+        ]
+      },
+      {
+        day: 18,
+        date: "Sat Dec 12, 2026",
+        title: "Harajuku, Shopping & Farewell Dinner",
+        base: "Base 5: Shinjuku, Tokyo (Night 4 of 4)",
+        steps: [
+          { name: "Shinjuku Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Relaxed open morning." },
+          { name: "Harajuku & Omotesandō", lat: 35.6702, lng: 139.7027, type: "poi", desc: "Tree-lined architectural avenues, boutiques, and souvenir browsing." },
+          { name: "Tokyo Farewell Dinner", lat: 35.6938, lng: 139.7034, type: "special", desc: "🏮 Celebratory farewell dinner in Tokyo; final packing." },
+          { name: "Shinjuku Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Final night in Japan." }
+        ]
+      },
+      {
+        day: 19,
+        date: "Sun Dec 13, 2026",
+        title: "Departure (HND → IAD → YOW)",
+        base: "Departure Day (UA804 16:50)",
+        steps: [
+          { name: "Shinjuku Hotel Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Relaxed morning. Leave Shinjuku ~13:55: Yamanote to Shinagawa, then Keikyu to HND T3." },
+          { name: "Haneda Airport Terminal 3", lat: 35.5494, lng: 139.7798, type: "transit", desc: "Arrive ~14:40. Flight UA804 departs 16:50 -> IAD 15:40; UA3583 -> YOW arr 19:27." }
+        ]
+      }
+    ];
+
+    // Master 5 Regional Bases (18 nights total across 5 bases)
+    const bases = [
+      { name: "Base 1: Asakusa, Tokyo (2n: Nov 25–26)", lat: 35.7126, lng: 139.7966 },
+      { name: "Base 2: Kanazawa Machiya (2n: Nov 27–28)", lat: 36.5685, lng: 136.6575 },
+      { name: "Base 3: Kyoto Higashiyama (8n: Nov 29–Dec 6)", lat: 34.9986, lng: 135.7806 },
+      { name: "Base 4: Hakone Ryokan (2n: Dec 7–8)", lat: 35.2496, lng: 139.0478 },
+      { name: "Base 5: Shinjuku, Tokyo (4n: Dec 9–12)", lat: 35.6909, lng: 139.7003 }
+    ];
+
+    // Layers
+    const activeRouteLayer = L.layerGroup().addTo(map);
+    const activeMarkersLayer = L.layerGroup().addTo(map);
+    const macroLayer = L.layerGroup().addTo(map);
+
+    let dayMarkersMap = [];
+
+    function createMarkerIcon(number, type) {
+      let iconClass = "marker-poi";
+      let displayContent = number;
+
+      if (type === "hotel") {
+        iconClass = "marker-hotel";
+        displayContent = "★";
+      } else if (type === "transit") {
+        iconClass = "marker-transit";
+        displayContent = "🚅";
+      } else if (type === "onsen") {
+        iconClass = "marker-onsen";
+        displayContent = "♨";
+      } else if (type === "special") {
+        iconClass = "marker-special";
+        displayContent = number;
+      }
+
+      return L.divIcon({
+        className: 'custom-leaflet-marker',
+        html: `<div class="step-marker ${iconClass}">${displayContent}</div>`,
+        iconSize: [26, 26],
+        iconAnchor: [13, 13],
+        popupAnchor: [0, -13]
+      });
+    }
+
+    // Populate Sidebar Cards
+    const cardsContainer = document.getElementById('dayCardsContainer');
+
+    itinerary.forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'day-card';
+      card.id = `day-card-${d.day}`;
+
+      let stepsHtml = '';
+      d.steps.forEach((step, idx) => {
+        let typeClass = step.type === 'hotel' ? 'hotel' : (step.type === 'transit' ? 'transit' : (step.type === 'onsen' ? 'onsen' : (step.type === 'special' ? 'special' : '')));
+        stepsHtml += `
+          <div class="timeline-step" onclick="zoomToStep(${idx}, event)">
+            <span class="step-idx ${typeClass}">${idx + 1}</span>
+            <div class="step-details">
+              <span class="step-name">${step.name}</span>
+              <span class="step-desc">${step.desc}</span>
+            </div>
+          </div>
+        `;
+      });
+
+      card.innerHTML = `
+        <div class="day-card-header">
+          <span class="day-number">DAY ${d.day}</span>
+          <span class="day-date">${d.date}</span>
+        </div>
+        <div class="day-title">${d.title}</div>
+        <div style="font-size:11.5px; color:var(--accent-blue); margin-bottom:4px;">📍 ${d.base}</div>
+        <div class="day-timeline">
+          <div style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Day Route Sequence:</div>
+          ${stepsHtml}
+        </div>
+      `;
+
+      card.addEventListener('click', (e) => {
+        if (!e.target.closest('.timeline-step')) {
+          selectDay(d.day);
+        }
+      });
+
+      cardsContainer.appendChild(card);
+    });
+
+    // ==========================================
+    // RENDER ROUTE FOR SELECTED DAY
+    // ==========================================
+    function selectDay(dayNum) {
+      document.querySelectorAll('.day-card').forEach(c => c.classList.remove('active'));
+      const activeCard = document.getElementById(`day-card-${dayNum}`);
+      if (activeCard) {
+        activeCard.classList.add('active');
+        activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      macroLayer.clearLayers();
+      activeRouteLayer.clearLayers();
+      activeMarkersLayer.clearLayers();
+      dayMarkersMap = [];
+
+      const dayData = itinerary.find(d => d.day === dayNum);
+      if (!dayData) return;
+
+      const pathCoords = [];
+
+      dayData.steps.forEach((step, idx) => {
+        const pt = [step.lat, step.lng];
+        pathCoords.push(pt);
+
+        const marker = L.marker(pt, {
+          icon: createMarkerIcon(idx + 1, step.type)
+        }).bindPopup(`
+          <div class="popup-title">${idx + 1}. ${step.name}</div>
+          <span class="popup-badge" style="background:rgba(244,63,94,0.15); color:var(--accent-red);">Day ${dayNum} · Stop #${idx + 1}</span>
+          <div class="popup-desc">${step.desc}</div>
+        `);
+
+        activeMarkersLayer.addLayer(marker);
+        dayMarkersMap.push(marker);
+      });
+
+      if (pathCoords.length > 1) {
+        L.polyline(pathCoords, {
+          color: '#ffffff',
+          weight: 5,
+          opacity: 0.8,
+          lineCap: 'round',
+          lineJoin: 'round'
+        }).addTo(activeRouteLayer);
+
+        L.polyline(pathCoords, {
+          color: '#f43f5e',
+          weight: 3.5,
+          opacity: 1,
+          dashArray: dayData.steps.some(s => s.type === 'transit') ? '6, 6' : null,
+          lineCap: 'round',
+          lineJoin: 'round'
+        }).addTo(activeRouteLayer);
+      }
+
+      if (pathCoords.length > 0) {
+        if (pathCoords.length === 1) {
+          map.flyTo(pathCoords[0], 13, { duration: 1.2 });
+        } else {
+          map.flyToBounds(pathCoords, { padding: [60, 60], maxZoom: 14, duration: 1.2 });
+        }
+      }
+    }
+
+    function zoomToStep(idx, event) {
+      if (event) event.stopPropagation();
+      if (dayMarkersMap[idx]) {
+        const marker = dayMarkersMap[idx];
+        map.flyTo(marker.getLatLng(), 15, { duration: 0.8 });
+        marker.openPopup();
+      }
+    }
+
+    // ==========================================
+    // MACRO OVERVIEW (5 REGIONAL BASES)
+    // ==========================================
+    function showMacroOverview() {
+      document.querySelectorAll('.day-card').forEach(c => c.classList.remove('active'));
+      activeRouteLayer.clearLayers();
+      activeMarkersLayer.clearLayers();
+      macroLayer.clearLayers();
+
+      const allBaseCoords = bases.map(b => [b.lat, b.lng]);
+
+      L.polyline(allBaseCoords, {
+        color: '#38bdf8',
+        weight: 3.5,
+        opacity: 0.9,
+        dashArray: '8, 6',
+        lineCap: 'round'
+      }).addTo(macroLayer);
+
+      bases.forEach((base) => {
+        const marker = L.marker([base.lat, base.lng], {
+          icon: L.divIcon({
+            className: 'custom-leaflet-marker',
+            html: `<div class="step-marker marker-hotel" style="width:28px; height:28px;">★</div>`,
+            iconSize: [28, 28],
+            iconAnchor: [14, 14],
+            popupAnchor: [0, -14]
+          })
+        }).bindPopup(`
+          <div class="popup-title">${base.name}</div>
+          <div class="popup-desc">Base accommodation of Stan & Alfiya's 18-night journey.</div>
+        `);
+        macroLayer.addLayer(marker);
+      });
+
+      map.flyToBounds([
+        [34.5, 134.5],
+        [37.0, 140.0]
+      ], { padding: [50, 50], duration: 1.4 });
+    }
+
+    // Default to Day 11 (Himeji Castle Day Trip from Kyoto) on launch
+    selectDay(11);
+  </script>
+</body>
+</html>
