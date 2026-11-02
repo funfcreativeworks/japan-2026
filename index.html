@@ -37,17 +37,19 @@
       display: flex;
       background: var(--bg-surface);
       color: var(--text-main);
+      position: relative;
     }
 
     #map {
       flex: 1;
       height: 100%;
       background: #020617;
+      z-index: 1;
     }
 
     /* SIDEBAR */
     #sidebar {
-      width: 460px;
+      width: 440px;
       height: 100%;
       background: var(--bg-panel);
       backdrop-filter: blur(14px);
@@ -56,6 +58,7 @@
       flex-direction: column;
       z-index: 1000;
       box-shadow: 6px 0 28px rgba(0,0,0,0.45);
+      flex-shrink: 0;
     }
 
     .header {
@@ -188,13 +191,14 @@
       font-size: 12px;
       color: #cbd5e1;
       cursor: pointer;
-      padding: 4px 6px;
+      padding: 6px 8px;
       border-radius: 6px;
-      transition: background 0.15s;
+      transition: all 0.15s;
     }
     .timeline-step:hover {
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.08);
       color: #fff;
+      transform: translateX(2px);
     }
     .step-idx {
       display: inline-flex;
@@ -218,44 +222,56 @@
     .step-details {
       display: flex;
       flex-direction: column;
+      flex: 1;
     }
     .step-name {
       font-weight: 600;
       color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .step-name::after {
+      content: "›";
+      font-size: 14px;
+      color: var(--text-muted);
+      opacity: 0.7;
     }
     .step-desc {
       font-size: 11px;
       color: var(--text-muted);
+      margin-top: 2px;
     }
 
     /* MAP LEGEND OVERLAY */
     .map-legend {
       position: absolute;
       bottom: 24px;
-      right: 24px;
+      left: 460px;
       background: var(--bg-panel);
       backdrop-filter: blur(10px);
       border: 1px solid var(--border-color);
-      padding: 14px 16px;
+      padding: 12px 14px;
       border-radius: 12px;
       z-index: 1000;
-      max-width: 290px;
+      max-width: 260px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      font-size: 12px;
+      font-size: 11px;
+      pointer-events: auto;
     }
     .legend-title {
       font-weight: 700;
-      font-size: 12px;
+      font-size: 11px;
       color: #fff;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
     }
     .legend-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 7px;
+      gap: 8px;
+      margin-bottom: 5px;
       color: #cbd5e1;
     }
     .legend-item:last-child { margin-bottom: 0; }
@@ -279,9 +295,10 @@
       border: 2px solid #fff;
       box-shadow: 0 3px 10px rgba(0,0,0,0.6);
       transition: transform 0.2s;
+      cursor: pointer;
     }
     .step-marker:hover {
-      transform: scale(1.3);
+      transform: scale(1.25);
     }
     .marker-poi { background: var(--accent-red); }
     .marker-hotel { background: var(--accent-amber); border-color: #fef3c7; }
@@ -296,7 +313,7 @@
       border: 1px solid var(--border-color);
       border-radius: 10px !important;
       box-shadow: 0 10px 25px rgba(0,0,0,0.6) !important;
-      padding: 4px;
+      padding: 6px;
     }
     .leaflet-popup-tip { background: #0f172a !important; }
     .popup-title {
@@ -317,6 +334,329 @@
       font-size: 12px;
       color: #cbd5e1;
       line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .popup-btn {
+      display: inline-block;
+      background: var(--accent-red);
+      color: #fff;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .popup-btn:hover {
+      background: #e11d48;
+    }
+
+    /* ================================================= */
+    /* SLIDE-OUT POI DETAIL DRAWER & CAROUSEL COMPONENT  */
+    /* ================================================= */
+    .poi-drawer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 450px;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.97);
+      backdrop-filter: blur(18px);
+      border-left: 1px solid var(--border-color);
+      box-shadow: -10px 0 35px rgba(0, 0, 0, 0.65);
+      z-index: 2000;
+      transform: translateX(105%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .poi-drawer.open {
+      transform: translateX(0);
+    }
+    .poi-drawer::-webkit-scrollbar { width: 6px; }
+    .poi-drawer::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+    .drawer-content {
+      padding: 22px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+
+    .drawer-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      background: #1e293b;
+      border: 1px solid var(--border-color);
+      color: #94a3b8;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.2s;
+    }
+    .drawer-close:hover {
+      background: var(--accent-red);
+      color: #fff;
+      border-color: var(--accent-red);
+      transform: scale(1.08);
+    }
+
+    .drawer-header {
+      padding-right: 36px;
+    }
+    .drawer-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 9999px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .drawer-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+    }
+    .drawer-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* CAROUSEL */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      background: #020617;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #334155;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .carousel-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.4s ease-in-out;
+    }
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .carousel-slide-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 14px 26px;
+      background: linear-gradient(to top, rgba(11, 17, 32, 0.95) 0%, rgba(11, 17, 32, 0.4) 70%, transparent 100%);
+      font-size: 11.5px;
+      color: #e2e8f0;
+      line-height: 1.3;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 34px;
+      height: 34px;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      transition: all 0.2s;
+      z-index: 10;
+    }
+    .carousel-btn:hover {
+      background: var(--accent-red);
+      border-color: var(--accent-red);
+      transform: translateY(-50%) scale(1.1);
+    }
+    .carousel-btn.prev { left: 8px; }
+    .carousel-btn.next { right: 8px; }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 10;
+    }
+    .carousel-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .carousel-dot.active {
+      background: var(--accent-red);
+      width: 16px;
+      border-radius: 4px;
+    }
+    .carousel-counter {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      z-index: 10;
+    }
+
+    /* NARRATIVE SECTION */
+    .narrative-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .narrative-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-amber);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .narrative-text {
+      font-size: 13px;
+      color: #e2e8f0;
+      line-height: 1.6;
+    }
+
+    /* PRACTICAL DETAILS */
+    .detail-grid {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .detail-row {
+      display: flex;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .detail-label {
+      width: 105px;
+      color: var(--text-muted);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .detail-val {
+      color: #f1f5f9;
+      flex: 1;
+    }
+
+    .drawer-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .btn-action-primary {
+      flex: 1;
+      background: var(--accent-red);
+      color: #fff;
+      border: none;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+    .btn-action-primary:hover {
+      background: #e11d48;
+    }
+    .btn-action-secondary {
+      flex: 1;
+      background: #334155;
+      color: #fff;
+      border: 1px solid #475569;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+    .btn-action-secondary:hover {
+      background: #475569;
+    }
+
+    /* RESPONSIVENESS */
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+      #sidebar { width: 100%; height: 42%; }
+      .map-legend { left: 16px; bottom: 16px; }
+      .poi-drawer {
+        width: 100%;
+        height: 80%;
+        top: auto;
+        bottom: 0;
+        transform: translateY(105%);
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+        border-radius: 16px 16px 0 0;
+      }
+      .poi-drawer.open {
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -370,12 +710,72 @@
     </div>
   </div>
 
+  <!-- SLIDE-OUT POI CAROUSEL & NARRATIVE DRAWER -->
+  <div id="poiDrawer" class="poi-drawer">
+    <div class="drawer-content">
+      <button class="drawer-close" onclick="closeDrawer()" title="Close details (Esc)">&times;</button>
+      
+      <div class="drawer-header">
+        <span id="drawerBadge" class="drawer-badge">Point of Interest</span>
+        <h2 id="drawerTitle" class="drawer-title">Sensō-ji Temple</h2>
+        <p id="drawerSubtitle" class="drawer-subtitle">Day 1 · Stop #4 · Asakusa, Tokyo</p>
+      </div>
+
+      <!-- 3-HERO IMAGE CAROUSEL -->
+      <div class="carousel-container">
+        <div class="carousel-counter" id="carouselCounter">1 / 3</div>
+        <div class="carousel-track" id="carouselTrack">
+          <!-- 3 Slides injected dynamically -->
+        </div>
+        <button class="carousel-btn prev" onclick="moveCarousel(-1)" aria-label="Previous photo">&#10094;</button>
+        <button class="carousel-btn next" onclick="moveCarousel(1)" aria-label="Next photo">&#10095;</button>
+        <div class="carousel-dots" id="carouselDots">
+          <span class="carousel-dot active" onclick="jumpToSlide(0)"></span>
+          <span class="carousel-dot" onclick="jumpToSlide(1)"></span>
+          <span class="carousel-dot" onclick="jumpToSlide(2)"></span>
+        </div>
+      </div>
+
+      <!-- CURATED NARRATIVE & STORY -->
+      <div class="narrative-card">
+        <div class="narrative-header">
+          <span>📖 Curated Story & Experience</span>
+        </div>
+        <p id="drawerNarrative" class="narrative-text">
+          Founded in 645 AD, Sensō-ji is Tokyo’s oldest and most revered Buddhist temple. Under twilight illumination, the day's buzzing crowds dissipate, casting a peaceful glow upon the massive five-story pagoda and vermilion timber eaves.
+        </p>
+      </div>
+
+      <!-- PRACTICAL DETAILS -->
+      <div class="detail-grid">
+        <div class="detail-row">
+          <span class="detail-label">📍 Base Region:</span>
+          <span id="drawerBaseInfo" class="detail-val">Base 1: Asakusa, Tokyo</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">🕒 Schedule & Tips:</span>
+          <span id="drawerScheduleDesc" class="detail-val">Evening stroll through lantern gates as crowds clear out.</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">🧭 Coordinates:</span>
+          <span id="drawerCoordinates" class="detail-val">35.7148° N, 139.7967° E</span>
+        </div>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="drawer-actions">
+        <button class="btn-action-primary" onclick="recenterMapOnDrawerPOI()">🎯 Recenter Map</button>
+        <a id="drawerGmapsLink" class="btn-action-secondary" target="_blank" rel="noopener">🌐 Open in Google Maps</a>
+      </div>
+    </div>
+  </div>
+
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
     // ==========================================
-    // 100% FREE TILE LAYERS (NO API KEY NEEDED)
+    // TILE LAYERS
     // ==========================================
     const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -413,8 +813,7 @@
 
     // ==========================================
     // COMPLETE 19-DAY MASTER ITINERARY DATA
-    // Validated against Oct 30 Master Schedule:
-    // Tokyo Asakusa (2n) -> Kanazawa (2n) -> Kyoto (8n) -> Hakone (2n) -> Tokyo Shinjuku (4n)
+    // Enriched with 3 Hero Images & Narratives per POI
     // ==========================================
     const itinerary = [
       {
@@ -423,11 +822,66 @@
         title: "Tokyo Arrival & Asakusa Settle-in",
         base: "Base 1: Asakusa, Tokyo (Night 1 of 2)",
         steps: [
-          { name: "Haneda Airport (HND)", lat: 35.5494, lng: 139.7798, type: "transit", desc: "UA131 lands 14:20. Get yen, set up Suica. Keikyu Access Express to Asakusa (~40m, ¥610)." },
-          { name: "Asakusa Hotel Base", lat: 35.7126, lng: 139.7966, type: "hotel", desc: "Check in to Asakusa hotel base." },
-          { name: "Kaminarimon & Nakamise-dōri", lat: 35.7111, lng: 139.7964, type: "poi", desc: "Evening stroll through lantern gates as crowds clear out." },
-          { name: "Sensō-ji Temple (Illuminated)", lat: 35.7148, lng: 139.7967, type: "poi", desc: "Sensō-ji lit up at night. Udon or tempura dinner in Asakusa." },
-          { name: "Asakusa Base", lat: 35.7126, lng: 139.7966, type: "hotel", desc: "Night 1 in Asakusa." }
+          {
+            name: "Haneda Airport (HND)",
+            lat: 35.5494, lng: 139.7798,
+            type: "transit",
+            desc: "UA131 lands 14:20. Get yen, set up Suica. Keikyu Access Express to Asakusa (~40m, ¥610).",
+            narrative: "Touching down at Tokyo Haneda aboard flight UA131 marks the start of Stan & Alfiya's 19-day grand Japanese journey. Haneda's Keikyu line offers a direct, stress-free route directly into historic downtown Asakusa without navigating Tokyo's massive central stations.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Welcome to Tokyo: Haneda transit gateway" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Monorails and express train links connecting the metropolis" },
+              { url: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&auto=format&fit=crop&q=80", caption: "Setting up Welcome Suica IC cards for frictionless transit" }
+            ]
+          },
+          {
+            name: "Asakusa Hotel Base",
+            lat: 35.7126, lng: 139.7966,
+            type: "hotel",
+            desc: "Check in to Asakusa hotel base.",
+            narrative: "Your welcoming base in Asakusa's historic shitamachi (low-city) district. Within an easy 5-minute stroll of the Sumida River promenade, lantern-lit alleys, and authentic late-night noodle houses.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Asakusa cityscape framed by the Tokyo Skytree" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Traditional streets just steps from the accommodation" },
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Warm hospitality and peaceful tatami ambiance" }
+            ]
+          },
+          {
+            name: "Kaminarimon & Nakamise-dōri",
+            lat: 35.7111, lng: 139.7964,
+            type: "poi",
+            desc: "Evening stroll through lantern gates as crowds clear out.",
+            narrative: "Guarded by dramatic statues of Fujin (Wind) and Raijin (Thunder), the massive 700kg red paper lantern of Kaminarimon marks the sacred entryway. At dusk, the Nakamise market stalls shutter down to reveal vibrant painted murals illustrating Asakusa's Edo history.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "The iconic Kaminarimon Thunder Gate lantern" },
+              { url: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=900&auto=format&fit=crop&q=80", caption: "Nakamise-dōri stone approach leading to Sensō-ji" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Evening quiet along the ancient temple market" }
+            ]
+          },
+          {
+            name: "Sensō-ji Temple (Illuminated)",
+            lat: 35.7148, lng: 139.7967,
+            type: "poi",
+            desc: "Sensō-ji lit up at night. Udon or tempura dinner in Asakusa.",
+            narrative: "Founded in 645 AD, Sensō-ji is Tokyo’s oldest temple. By night, after tour buses disperse, floodlights illuminate the soaring 5-story pagoda and vermilion main hall against the dark sky, creating a quiet, spiritual wonderland.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Five-story pagoda glowing in nighttime illumination" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Sensō-ji's main hall under dramatic evening spotlights" },
+              { url: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=900&auto=format&fit=crop&q=80", caption: "Quiet temple courtyard after the daytime crowds disperse" }
+            ]
+          },
+          {
+            name: "Asakusa Base",
+            lat: 35.7126, lng: 139.7966,
+            type: "hotel",
+            desc: "Night 1 in Asakusa.",
+            narrative: "Rest up after the transpacific flight in the peaceful evening ambiance of historic Asakusa, ready for tomorrow's full Tokyo exploration.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Restful evening in historic Asakusa" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Lantern-lit alleys surrounding the base" },
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Traditional architecture in old Tokyo" }
+            ]
+          }
         ]
       },
       {
@@ -436,13 +890,90 @@
         title: "Sensō-ji, Shinjuku Gyōen, Owls, Akihabara & Ueno",
         base: "Base 1: Asakusa, Tokyo (Night 2 of 2)",
         steps: [
-          { name: "Asakusa Base", lat: 35.7126, lng: 139.7966, type: "hotel", desc: "Morning start from Asakusa hotel." },
-          { name: "Sensō-ji (Early)", lat: 35.7148, lng: 139.7967, type: "poi", desc: "Crowd-free early morning walk through the ancient temple grounds." },
-          { name: "Shinjuku Gyōen National Garden", lat: 35.6852, lng: 139.7100, type: "poi", desc: "Morning autumn foliage walk: golden ginkgos & vibrant red Japanese maples (opens 09:00, ¥500)." },
-          { name: "Akiba Fukurou Owl Cafe", lat: 35.6997, lng: 139.7744, type: "special", desc: "🦉 Direct JR Chūō-Sōbu train to Akihabara for your timed reservation to meet and hold gentle owls." },
-          { name: "Akihabara (Super Potato)", lat: 35.6990, lng: 139.7710, type: "poi", desc: "Multi-floor retro video game museum & vintage gaming cartridges right around the corner." },
-          { name: "Ueno Park & Shinobazu Pond", lat: 35.7141, lng: 139.7741, type: "poi", desc: "Late afternoon stroll through wide tree promenades and historic lotus pond." },
-          { name: "Asakusa Base", lat: 35.7126, lng: 139.7966, type: "hotel", desc: "Quick direct 5-minute Ginza Line ride back to Asakusa for dinner. Night 2 in Asakusa." }
+          {
+            name: "Asakusa Base",
+            lat: 35.7126, lng: 139.7966,
+            type: "hotel",
+            desc: "Morning start from Asakusa hotel.",
+            narrative: "Early morning start from your Asakusa base to catch Tokyo's historic and natural sights during peaceful morning hours.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Morning calm over Asakusa" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Tokyo sunrise over the Sumida River" },
+              { url: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=900&auto=format&fit=crop&q=80", caption: "Streets coming to life in the early morning" }
+            ]
+          },
+          {
+            name: "Sensō-ji (Early)",
+            lat: 35.7148, lng: 139.7967,
+            type: "poi",
+            desc: "Crowd-free early morning walk through the ancient temple grounds.",
+            narrative: "Experiencing Sensō-ji at dawn is a world away from tourist hours. Local elders bow before the Kannondō hall, incense smoke drifts in the crisp morning air, and birds flutter across the sweeping eaves.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Dawn serenity across the temple grounds" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Incense burner and early morning worshippers" },
+              { url: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=900&auto=format&fit=crop&q=80", caption: "The magnificent pagoda bathed in soft morning sunlight" }
+            ]
+          },
+          {
+            name: "Shinjuku Gyōen National Garden",
+            lat: 35.6852, lng: 139.7100,
+            type: "poi",
+            desc: "Morning autumn foliage walk: golden ginkgos & vibrant red Japanese maples (opens 09:00, ¥500).",
+            narrative: "Once an imperial garden for the Naitō daimyo family, Shinjuku Gyōen spans 144 acres blending traditional Japanese strolling gardens with French and English landscapes. In late November, golden ginkgo tunnels and vivid red momiji maples peak against mirrored ponds.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=900&auto=format&fit=crop&q=80", caption: "Autumn maple reflections across Shinjuku Gyōen's ponds" },
+              { url: "https://images.unsplash.com/photo-1583083527882-4bee9aba2eea?w=900&auto=format&fit=crop&q=80", caption: "Traditional teahouse nestled in fiery autumn colors" },
+              { url: "https://images.unsplash.com/photo-1578637387939-43c525550085?w=900&auto=format&fit=crop&q=80", caption: "Golden ginkgo promenades bathed in November morning light" }
+            ]
+          },
+          {
+            name: "Akiba Fukurou Owl Cafe",
+            lat: 35.6997, lng: 139.7744,
+            type: "special",
+            desc: "🦉 Direct JR Chūō-Sōbu train to Akihabara for your timed reservation to meet and hold gentle owls.",
+            narrative: "A quiet, chandelier-lit sanctuary accompanied by soft classical piano music. Stan & Alfiya meet, gently stroke, and hold majestic, docile owls under the careful guidance of passionate animal caregivers.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1543549790-8b5f4a028cfb?w=900&auto=format&fit=crop&q=80", caption: "Magnificent barn owl with stunning golden feathers" },
+              { url: "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=900&auto=format&fit=crop&q=80", caption: "Akihabara neighborhood setting" },
+              { url: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&auto=format&fit=crop&q=80", caption: "Gentle portrait of an owl companion" }
+            ]
+          },
+          {
+            name: "Akihabara (Super Potato)",
+            lat: 35.6990, lng: 139.7710,
+            type: "poi",
+            desc: "Multi-floor retro video game museum & vintage gaming cartridges right around the corner.",
+            narrative: "A retro gaming wonderland spanning five floors packed floor-to-ceiling with vintage Nintendo Famicom, Super Famicom, Game Boy, and Sega Genesis cartridges, topped with a 5th-floor nostalgic 1980s candy arcade.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=900&auto=format&fit=crop&q=80", caption: "Vintage retro gaming consoles and classic CRT screens" },
+              { url: "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=900&auto=format&fit=crop&q=80", caption: "Electric Town Akihabara's colorful anime and gaming facades" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Nostalgic gaming culture in Tokyo's electronics heart" }
+            ]
+          },
+          {
+            name: "Ueno Park & Shinobazu Pond",
+            lat: 35.7141, lng: 139.7741,
+            type: "poi",
+            desc: "Late afternoon stroll through wide tree promenades and historic lotus pond.",
+            narrative: "One of Japan’s earliest public parks, established in 1873. Shinobazu Pond's historic octagonal Bentendō hall floats amidst sea of lotus plants, framed by golden autumn leaves and broad promenades.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Shinobazu Pond and Bentendō Temple hall" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Autumn tree canopies over Ueno Park promenades" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Peaceful reflection waters at sunset" }
+            ]
+          },
+          {
+            name: "Asakusa Base",
+            lat: 35.7126, lng: 139.7966,
+            type: "hotel",
+            desc: "Quick direct 5-minute Ginza Line ride back to Asakusa for dinner. Night 2 in Asakusa.",
+            narrative: "Return to your cozy Asakusa base, enjoy a comforting tempura or steaming ramen dinner, and pack your daybags for tomorrow's Shinkansen journey to the Japan Alps.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Lantern-lit evening in Asakusa" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Quiet backstreets of historic Tokyo" },
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Evening dinner ambiance in Asakusa" }
+            ]
+          }
         ]
       },
       {
@@ -451,14 +982,102 @@
         title: "Kanazawa Arrival, Kimono & Ninja-dera (Birthday)",
         base: "Base 2: Kanazawa Machiya (Night 1 of 2)",
         steps: [
-          { name: "Tokyo Station", lat: 35.6812, lng: 139.7671, type: "transit", desc: "Kagayaki 503 (07:20 -> 09:44) through the Alps to Kanazawa." },
-          { name: "Kanazawa Station", lat: 36.5780, lng: 136.6478, type: "transit", desc: "Arrive 09:44. Drop bags." },
-          { name: "Ōmichō Market", lat: 36.5714, lng: 136.6563, type: "poi", desc: "~10:00 Kaisendon seafood sashimi bowl breakfast." },
-          { name: "Kokoyui Kimono Rental (心結)", lat: 36.5772, lng: 136.6502, type: "special", desc: "👘 ~11:00 Authentic Kaga Yūzen hand-dyed silk kimono dressing." },
-          { name: "Kenroku-en Garden", lat: 36.5621, lng: 136.6627, type: "poi", desc: "One of Japan's Top 3 gardens at autumn peak; yukitsuri rope cones." },
-          { name: "Higashi Chaya District", lat: 36.5725, lng: 136.6665, type: "poi", desc: "Hakuichi 24K gold-leaf soft-serve, matcha desserts & teahouse interior." },
-          { name: "Ninja-dera (Myōryū-ji)", lat: 36.5543, lng: 136.6501, type: "special", desc: "⚔️ Reservation-only temple tour with hidden trapdoors & trick staircases (drop if overloaded)." },
-          { name: "Kanazawa Machiya Base", lat: 36.5685, lng: 136.6575, type: "hotel", desc: "Return kimonos; birthday celebration dinner; check in to traditional machiya." }
+          {
+            name: "Tokyo Station",
+            lat: 35.6812, lng: 139.7671,
+            type: "transit",
+            desc: "Kagayaki 503 (07:20 -> 09:44) through the Alps to Kanazawa.",
+            narrative: "Board the sleek Hokuriku Shinkansen Kagayaki bullet train at Tokyo's grand brick station, rocketing through snow-capped mountains of Nagano directly to Kanazawa on the Sea of Japan coast.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Tokyo Station historic red-brick facade" },
+              { url: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&auto=format&fit=crop&q=80", caption: "Sleek Shinkansen high-speed bullet train" },
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "High speed mountain vistas along the Hokuriku corridor" }
+            ]
+          },
+          {
+            name: "Kanazawa Station",
+            lat: 36.5780, lng: 136.6478,
+            type: "transit",
+            desc: "Arrive 09:44. Drop bags.",
+            narrative: "Voted one of the world's most beautiful train stations, Kanazawa welcomes visitors with the monumental cedar Tsuzumi-mon drum gate beneath a futuristic glass geodetic dome.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1578637387939-43c525550085?w=900&auto=format&fit=crop&q=80", caption: "The monumental Tsuzumi-mon wooden drum gate" },
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "The glass Motenashi welcoming dome" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Kanazawa station architectural gateway" }
+            ]
+          },
+          {
+            name: "Ōmichō Market",
+            lat: 36.5714, lng: 136.6563,
+            type: "poi",
+            desc: "~10:00 Kaisendon seafood sashimi bowl breakfast.",
+            narrative: "Kanazawa's lively culinary pantry since the Edo period (1721). Over 180 stalls showcase fresh winter Sea of Japan crab, sweet botan shrimp, fatty tuna, and overflowing kaisendon rice bowls.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&auto=format&fit=crop&q=80", caption: "Freshly prepared kaisendon seafood sashimi bowl" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Bustling market stalls packed with fresh crab and sea urchin" },
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Historic merchant atmosphere inside Ōmichō" }
+            ]
+          },
+          {
+            name: "Kokoyui Kimono Rental (心結)",
+            lat: 36.5772, lng: 136.6502,
+            type: "special",
+            desc: "👘 ~11:00 Authentic Kaga Yūzen hand-dyed silk kimono dressing.",
+            narrative: "A memorable birthday highlight for Alfiya: dressing in authentic Kaga Yūzen silk kimonos, celebrated for 500 years for delicate botanical motifs and rich natural dye shadings, prepared by expert dressers.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Hand-dyed Kaga Yūzen silk kimono elegance" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Intricate floral silk embroidery patterns" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Traditional Japanese kimono experience" }
+            ]
+          },
+          {
+            name: "Kenroku-en Garden",
+            lat: 36.5621, lng: 136.6627,
+            type: "poi",
+            desc: "One of Japan's Top 3 gardens at autumn peak; yukitsuri rope cones.",
+            narrative: "Consistently ranked among Japan's three most sublime landscape gardens. In late November, ancient Karasaki pine trees are secured with 'yukitsuri'—conical spiderwebs of straw rope built to protect branches from heavy snow.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1578637387939-43c525550085?w=900&auto=format&fit=crop&q=80", caption: "Iconic Kotoji-tōrō stone lantern and yukitsuri rope cones" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Autumn maple colors reflecting across Kasumigaike Pond" },
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Stone bridges and meticulously sculpted pine gardens" }
+            ]
+          },
+          {
+            name: "Higashi Chaya District",
+            lat: 36.5725, lng: 136.6665,
+            type: "poi",
+            desc: "Hakuichi 24K gold-leaf soft-serve, matcha desserts & teahouse interior.",
+            narrative: "Kanazawa's famed geisha teahouse quarter with wooden kimusuko latticework. Try Hakuichi's famous shimmering 24-karat gold-leaf soft serve and explore preserved 1820s teahouses.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Preserved Edo wooden geisha teahouse facades" },
+              { url: "https://images.unsplash.com/photo-1578637387939-43c525550085?w=900&auto=format&fit=crop&q=80", caption: "Stone-paved alleys of Higashi Chaya" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Artisanal gold leaf and matcha tea traditions" }
+            ]
+          },
+          {
+            name: "Ninja-dera (Myōryū-ji)",
+            lat: 36.5543, lng: 136.6501,
+            type: "special",
+            desc: "⚔️ Reservation-only temple tour with hidden trapdoors & trick staircases (drop if overloaded).",
+            narrative: "Disguised as a Buddhist temple, Myōryū-ji served as a secret defensive fortress for the Maeda clan. It contains 29 hidden staircases, trapdoors, escape tunnels, and concealed weapon pits.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Historic temple facade hiding secret tactical defenses" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Intricate wooden joinery and hidden architectural marvels" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Atmospheric courtyard of Myōryū-ji" }
+            ]
+          },
+          {
+            name: "Kanazawa Machiya Base",
+            lat: 36.5685, lng: 136.6575,
+            type: "hotel",
+            desc: "Return kimonos; birthday celebration dinner; check in to traditional machiya.",
+            narrative: "Settle into your traditional private Kanazawa machiya townhouse, featuring cedar beams, private tsuboniwa courtyard gardens, and tatami living rooms.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Authentic wooden machiya townhouse interior" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Tranquil private tsuboniwa rock garden" },
+              { url: "https://images.unsplash.com/photo-1578637387939-43c525550085?w=900&auto=format&fit=crop&q=80", caption: "Kanazawa evening street ambiance" }
+            ]
+          }
         ]
       },
       {
@@ -467,11 +1086,66 @@
         title: "Shirakawa-go Farmhouses & Hida Folk Village Excursion",
         base: "Base 2: Kanazawa Machiya (Night 2 of 2)",
         steps: [
-          { name: "Kanazawa Bus Terminal", lat: 36.5780, lng: 136.6478, type: "transit", desc: "Nohi Bus 08:40 into the Alps to Shirakawa-go." },
-          { name: "Shirakawa-go (Ogimachi)", lat: 36.2586, lng: 136.9065, type: "poi", desc: "Arrive 10:05. Wada House (¥400), Shiroyama viewpoint, House of Pudding." },
-          { name: "Takayama Bus Terminal", lat: 36.1420, lng: 137.2580, type: "transit", desc: "Bus 12:35 -> Takayama 13:25. Taxi or Sarubobo Bus to Hida no Sato." },
-          { name: "Hida no Sato (Folk Village)", lat: 36.1326, lng: 137.2346, type: "poi", desc: "¥700 entry; four ICP houses, Shunkei lacquer, and ichii ittobori woodcarving." },
-          { name: "Kanazawa Machiya Base", lat: 36.5685, lng: 136.6575, type: "hotel", desc: "Return to Kanazawa (bus or train via Toyama). Optional Kenroku-en light-up (18:00–21:00)." }
+          {
+            name: "Kanazawa Bus Terminal",
+            lat: 36.5780, lng: 136.6478,
+            type: "transit",
+            desc: "Nohi Bus 08:40 into the Alps to Shirakawa-go.",
+            narrative: "Board the comfortable highway bus climbing deep into the Japanese Alps, traversing mountain tunnels into the remote river valley of Shirakawa-go.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Highway into the misty Japanese Alps" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Alpine scenery along the Hokuriku highway" },
+              { url: "https://images.unsplash.com/photo-1578637387939-43c525550085?w=900&auto=format&fit=crop&q=80", caption: "Climbing toward the mountain valley of Ogimachi" }
+            ]
+          },
+          {
+            name: "Shirakawa-go (Ogimachi)",
+            lat: 36.2586, lng: 136.9065,
+            type: "poi",
+            desc: "Arrive 10:05. Wada House (¥400), Shiroyama viewpoint, House of Pudding.",
+            narrative: "A UNESCO World Heritage fairy tale village. Gasshō-zukuri farmhouses ('built like hands in prayer') feature steep thatch roofs built without nails to withstand 3-meter winter snowdrifts. Visit Wada House and hike to Shiroyama viewpoint.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Iconic steep-pitched thatched roof farmhouses in Ogimachi" },
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Panoramic vista over Shirakawa-go from Shiroyama viewpoint" },
+              { url: "https://images.unsplash.com/photo-1570459027562-4a916cc6113f?w=900&auto=format&fit=crop&q=80", caption: "Clear mountain stream running through the village" }
+            ]
+          },
+          {
+            name: "Takayama Bus Terminal",
+            lat: 36.1420, lng: 137.2580,
+            type: "transit",
+            desc: "Bus 12:35 -> Takayama 13:25. Taxi or Sarubobo Bus to Hida no Sato.",
+            narrative: "Cross from Gifu's Shirakawa valley to the historic merchant town of Takayama, famous for timber craftsmanship, morning sake markets, and Hida beef.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1570459027562-4a916cc6113f?w=900&auto=format&fit=crop&q=80", caption: "Takayama historic merchant town atmosphere" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Old town wooden streetscapes in Takayama" },
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Mountain slopes surrounding the alpine town" }
+            ]
+          },
+          {
+            name: "Hida no Sato (Folk Village)",
+            lat: 36.1326, lng: 137.2346,
+            type: "poi",
+            desc: "¥700 entry; four ICP houses, Shunkei lacquer, and ichii ittobori woodcarving.",
+            narrative: "An open-air museum preserving over 30 authentic Edo-period farmhouses relocated from deep alpine gorges. Stroll around Gozen Pond and watch artisans carve fragrant yew wood and apply Shunkei lacquer.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1570459027562-4a916cc6113f?w=900&auto=format&fit=crop&q=80", caption: "Historic farmhouses mirrored in Gozen Pond" },
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Authentic thatched-roof architecture preserved in the village" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Woodcarving and craftsmanship displays" }
+            ]
+          },
+          {
+            name: "Kanazawa Machiya Base",
+            lat: 36.5685, lng: 136.6575,
+            type: "hotel",
+            desc: "Return to Kanazawa (bus or train via Toyama). Optional Kenroku-en light-up (18:00–21:00).",
+            narrative: "Return to Kanazawa for your final evening in the machiya. Option to bundle up and witness Kenroku-en's enchanting nighttime illumination if open.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Cozy machiya evening in Kanazawa" },
+              { url: "https://images.unsplash.com/photo-1578637387939-43c525550085?w=900&auto=format&fit=crop&q=80", caption: "Evening lantern glow along traditional canals" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Warm hospitality in the artisan capital" }
+            ]
+          }
         ]
       },
       {
@@ -480,12 +1154,78 @@
         title: "Train to Kyoto & Night Illumination",
         base: "Base 3: Kyoto Higashiyama (Night 1 of 8)",
         steps: [
-          { name: "Kanazawa Station", lat: 36.5780, lng: 136.6478, type: "transit", desc: "Shinkansen to Tsuruga, then Thunderbird to Kyoto (~2h10 total)." },
-          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Check in to historic Higashiyama preservation district base (8-night home anchor!)." },
-          { name: "Ninenzaka & Sannenzaka", lat: 34.9985, lng: 135.7800, type: "poi", desc: "Cobblestone lanes framed by traditional wooden machiya." },
-          { name: "Yasaka Pagoda (Hōkan-ji)", lat: 34.9985, lng: 135.7797, type: "poi", desc: "Kyoto postcard sunset glow against the 5-story pagoda." },
-          { name: "Kiyomizu-dera Night Illumination", lat: 34.9949, lng: 135.7850, type: "special", desc: "Massive wooden stage hovering over illuminated sea of glowing red maples." },
-          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Night 1 in Kyoto." }
+          {
+            name: "Kanazawa Station",
+            lat: 36.5780, lng: 136.6478,
+            type: "transit",
+            desc: "Shinkansen to Tsuruga, then Thunderbird to Kyoto (~2h10 total).",
+            narrative: "Board the Shinkansen down to Tsuruga, transferring smoothly to the Thunderbird Limited Express curving along Lake Biwa into ancient Kyoto.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Kanazawa departure on the Hokuriku route" },
+              { url: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&auto=format&fit=crop&q=80", caption: "Thunderbird express train skirting Lake Biwa" },
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Approaching Kyoto Station's soaring glass atrium" }
+            ]
+          },
+          {
+            name: "Higashiyama Base",
+            lat: 34.9986, lng: 135.7806,
+            type: "hotel",
+            desc: "Check in to historic Higashiyama preservation district base (8-night home anchor!).",
+            narrative: "Welcome to your 8-night anchor home in the preserved historic heart of Kyoto. Step straight from your doorstep onto ancient flagstone streets, bypassing crowded buses and train lines.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Higashiyama's timeless wooden machiya neighborhood" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Cobblestone alleys just outside your door" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Peaceful courtyard tranquility in historic Kyoto" }
+            ]
+          },
+          {
+            name: "Ninenzaka & Sannenzaka",
+            lat: 34.9985, lng: 135.7800,
+            type: "poi",
+            desc: "Cobblestone lanes framed by traditional wooden machiya.",
+            narrative: "Stone-paved pedestrian slopes linking Yasaka Shrine to Kiyomizu-dera since the 8th century. Lined with ceramic studios, incense purveyors, and traditional sweet shops.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Historic stone stairs of Ninenzaka framed by machiya" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Traditional paper lantern shops and cedar facades" },
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Evening twilight over Sannenzaka" }
+            ]
+          },
+          {
+            name: "Yasaka Pagoda (Hōkan-ji)",
+            lat: 34.9985, lng: 135.7797,
+            type: "poi",
+            desc: "Kyoto postcard sunset glow against the 5-story pagoda.",
+            narrative: "The quintessential symbol of Higashiyama. This 46-meter five-story wooden pagoda dates to 592 AD, silhouetted against the amber glow of sunset over sloping tiled roofs.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Yasaka Pagoda silhouetted at golden hour" },
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Street view leading toward Hōkan-ji" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Twilight lanterns illuminating the pagoda base" }
+            ]
+          },
+          {
+            name: "Kiyomizu-dera Night Illumination",
+            lat: 34.9949, lng: 135.7850,
+            type: "special",
+            desc: "Massive wooden stage hovering over illuminated sea of glowing red maples.",
+            narrative: "An unforgettable sight: Kiyomizu-dera's massive timber stage, built without a single nail, hovers 13 meters above a glowing valley of a thousand red maple trees, bisected by a luminous blue light beam representing the compassion of Kannon.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Kiyomizu-dera wooden stage hovering over autumn maples" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "The sacred blue light beam radiating across the Kyoto night" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Illuminated vermilion temple gates at night" }
+            ]
+          },
+          {
+            name: "Higashiyama Base",
+            lat: 34.9986, lng: 135.7806,
+            type: "hotel",
+            desc: "Night 1 in Kyoto.",
+            narrative: "Stroll back down the cobblestones directly to your bed. No crowded buses or train rides needed—the magic of staying in Higashiyama.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Quiet night in Higashiyama" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Lanterns glowing along empty historic alleys" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Restful evening in Kyoto" }
+            ]
+          }
         ]
       },
       {
@@ -494,13 +1234,90 @@
         title: "Arashiyama Bamboo & River Vistas",
         base: "Base 3: Kyoto Higashiyama (Night 2 of 8)",
         steps: [
-          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Randen tram / JR train west to Arashiyama." },
-          { name: "Togetsukyō Bridge", lat: 35.0129, lng: 135.6777, type: "poi", desc: "400-year-old wooden bridge framed by autumn peaks." },
-          { name: "Tenryū-ji Zen Temple", lat: 35.0158, lng: 135.6777, type: "poi", desc: "14th-century pond garden unchanged for 700 years." },
-          { name: "Arashiyama Bamboo Grove", lat: 35.0169, lng: 135.6712, type: "poi", desc: "Towering emerald green bamboo stalks." },
-          { name: "Iwatayama Monkey Park", lat: 35.0104, lng: 135.6766, type: "poi", desc: "Wild macaques & panoramic Kyoto basin vista (¥800, cash only)." },
-          { name: "Gion Shirakawa Canal", lat: 35.0055, lng: 135.7745, type: "poi", desc: "Willow-lined canal stroll; dinner at Tempura Endo Yasaka." },
-          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Night 2 in Kyoto." }
+          {
+            name: "Higashiyama Base",
+            lat: 34.9986, lng: 135.7806,
+            type: "hotel",
+            desc: "Randen tram / JR train west to Arashiyama.",
+            narrative: "Depart your Higashiyama base early morning and ride west across Kyoto to the forested foothills of Arashiyama.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Morning departure from Higashiyama" },
+              { url: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=900&auto=format&fit=crop&q=80", caption: "Crossing west toward the Arashiyama mountains" },
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Randen retro tram lines through Kyoto" }
+            ]
+          },
+          {
+            name: "Togetsukyō Bridge",
+            lat: 35.0129, lng: 135.6777,
+            type: "poi",
+            desc: "400-year-old wooden bridge framed by autumn peaks.",
+            narrative: "'Moon Crossing Bridge' spans the broad Katsura River with hillsides cloaked in vibrant fall foliage, immortalized by Heian court poets over a millennium ago.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Togetsukyō Bridge framed by autumn-colored mountains" },
+              { url: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=900&auto=format&fit=crop&q=80", caption: "Wooden pleasure boats on the Katsura River" },
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Morning mist rising over Arashiyama peaks" }
+            ]
+          },
+          {
+            name: "Tenryū-ji Zen Temple",
+            lat: 35.0158, lng: 135.6777,
+            type: "poi",
+            desc: "14th-century pond garden unchanged for 700 years.",
+            narrative: "Head temple of the Rinzai Zen sect, founded in 1339. Its Sōgenchi pond garden was designed by Zen master Musō Soseki, seamlessly borrowing the surrounding autumn mountains into its composition.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Sōgenchi Zen garden pond reflecting autumn trees" },
+              { url: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=900&auto=format&fit=crop&q=80", caption: "Traditional tatami temple verandas overlooking rock gardens" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Dragon paintings and Zen timber halls" }
+            ]
+          },
+          {
+            name: "Arashiyama Bamboo Grove",
+            lat: 35.0169, lng: 135.6712,
+            type: "poi",
+            desc: "Towering emerald green bamboo stalks.",
+            narrative: "A soaring natural corridor of endless green bamboo stalks rustling in the breeze. Recognized by Japan's Ministry of the Environment as one of the '100 Soundscapes of Japan.'",
+            images: [
+              { url: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=900&auto=format&fit=crop&q=80", caption: "Sunlight filtering through the emerald bamboo canopy" },
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Towering stalks framing the winding woodland path" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Atmospheric bamboo groves of Arashiyama" }
+            ]
+          },
+          {
+            name: "Iwatayama Monkey Park",
+            lat: 35.0104, lng: 135.6766,
+            type: "poi",
+            desc: "Wild macaques & panoramic Kyoto basin vista (¥800, cash only).",
+            narrative: "Hike up Mount Arashiyama to meet over 120 wild Japanese snow macaques roaming freely on the mountain summit, complete with 180-degree panoramic views over Kyoto.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=900&auto=format&fit=crop&q=80", caption: "Playful Japanese macaque on the mountain summit" },
+              { url: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=900&auto=format&fit=crop&q=80", caption: "Sweeping panoramic views across the Kyoto basin" },
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Snow monkeys resting against autumn mountain foliage" }
+            ]
+          },
+          {
+            name: "Gion Shirakawa Canal",
+            lat: 35.0055, lng: 135.7745,
+            type: "poi",
+            desc: "Willow-lined canal stroll; dinner at Tempura Endo Yasaka.",
+            narrative: "Kyoto's most romantic historic alley: willow-shaded stone bridges, discreet geiko teahouses, and paper lanterns glowing across the trickling waters of the Shirakawa canal.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Willow-lined stone bridge over Shirakawa canal" },
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Lantern-lit ochaya teahouses in Gion" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Intimate dining ambiance in historic Gion" }
+            ]
+          },
+          {
+            name: "Higashiyama Base",
+            lat: 34.9986, lng: 135.7806,
+            type: "hotel",
+            desc: "Night 2 in Kyoto.",
+            narrative: "A short, pleasant walk from Gion brings you back to your Higashiyama sanctuary for the night.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Higashiyama night peace" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Quiet stone streets after dark" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Comfortable night in Kyoto" }
+            ]
+          }
         ]
       },
       {
@@ -509,11 +1326,66 @@
         title: "Torii Climb, Golden Pavilion & Pontochō",
         base: "Base 3: Kyoto Higashiyama (Night 3 of 8)",
         steps: [
-          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Early start south." },
-          { name: "Fushimi Inari Taisha", lat: 34.9671, lng: 135.7727, type: "poi", desc: "Early climb through 10,000 vermilion torii gates winding up sacred Mount Inari." },
-          { name: "Kinkaku-ji (Golden Pavilion)", lat: 35.0394, lng: 135.7292, type: "poi", desc: "Kyoto City Bus #205 north to view pure gold leaf reflecting over pond." },
-          { name: "Pontochō Alley & Gion", lat: 35.0055, lng: 135.7710, type: "poi", desc: "Dinner in atmospheric narrow lantern lane (hot pot or Ohmi wagyu) & Gion walk." },
-          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Night 3 in Kyoto." }
+          {
+            name: "Higashiyama Base",
+            lat: 34.9986, lng: 135.7806,
+            type: "hotel",
+            desc: "Early start south.",
+            narrative: "Early start to beat the crowds at Fushimi Inari Taisha before heading to north Kyoto's Golden Pavilion.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Crisp December morning in Kyoto" },
+              { url: "https://images.unsplash.com/photo-1478436127897-769e00d7c583?w=900&auto=format&fit=crop&q=80", caption: "Heading south toward Mount Inari" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Kyoto morning light" }
+            ]
+          },
+          {
+            name: "Fushimi Inari Taisha",
+            lat: 34.9671, lng: 135.7727,
+            type: "poi",
+            desc: "Early climb through 10,000 vermilion torii gates winding up sacred Mount Inari.",
+            narrative: "Head shrine of Inari, the Shinto kami of rice and business prosperity. Over 10,000 tightly grouped vermilion torii gates form hypnotic tunnels ascending the cedar forests of holy Mount Inari.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1478436127897-769e00d7c583?w=900&auto=format&fit=crop&q=80", caption: "The endless red Senbon Torii tunnel path" },
+              { url: "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=900&auto=format&fit=crop&q=80", caption: "Fox (kitsune) stone guardian holding the granary key" },
+              { url: "https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=900&auto=format&fit=crop&q=80", caption: "Sunlight filtering through the vermilion shrine pillars" }
+            ]
+          },
+          {
+            name: "Kinkaku-ji (Golden Pavilion)",
+            lat: 35.0394, lng: 135.7292,
+            type: "poi",
+            desc: "Kyoto City Bus #205 north to view pure gold leaf reflecting over pond.",
+            narrative: "Originally the retirement villa of Shogun Ashikaga Yoshimitsu, the top two floors of this Zen temple are wrapped entirely in pure gold leaf, creating a breathtaking mirror reflection upon the waters of Kyōko-chi pond.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Kinkaku-ji's pure gold leaf facade reflecting on Mirror Pond" },
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Autumn maple canopy framing the golden pavilion" },
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Golden phoenix finial crowning the temple roof" }
+            ]
+          },
+          {
+            name: "Pontochō Alley & Gion",
+            lat: 35.0055, lng: 135.7710,
+            type: "poi",
+            desc: "Dinner in atmospheric narrow lantern lane (hot pot or Ohmi wagyu) & Gion walk.",
+            narrative: "A narrow pedestrian alley running parallel to the Kamogawa River, renowned for centuries as Kyoto's premier dining corridor, packed with intimate yakitori, sukiyaki, and wagyu beef restaurants.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Atmospheric lantern glow along narrow Pontochō alley" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Traditional noren curtains and wooden doorways" },
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Evening riverside dining overlooking Kamogawa" }
+            ]
+          },
+          {
+            name: "Higashiyama Base",
+            lat: 34.9986, lng: 135.7806,
+            type: "hotel",
+            desc: "Night 3 in Kyoto.",
+            narrative: "End the day with a relaxed nighttime stroll across the Shijō bridge back to your Higashiyama quarters.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Higashiyama night tranquility" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Lanterns along the stone paving" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Comfortable night in Kyoto" }
+            ]
+          }
         ]
       },
       {
@@ -522,13 +1394,90 @@
         title: "Nara Ancient Capital Day Trip",
         base: "Base 3: Kyoto Higashiyama (Night 4 of 8)",
         steps: [
-          { name: "Kyoto Station", lat: 34.9858, lng: 135.7588, type: "transit", desc: "JR Miyakoji Rapid to Nara (~45 min, ¥720)." },
-          { name: "Nakatanidou Yomogi Mochi", lat: 34.6818, lng: 135.8285, type: "poi", desc: "Watch high-speed mochi pounding demonstration; grab warm mochi." },
-          { name: "Nara Park Sika Deer", lat: 34.6850, lng: 135.8430, type: "poi", desc: "Meet sacred bowing wild deer in the park." },
-          { name: "Tōdai-ji (Great Buddha)", lat: 34.6890, lng: 135.8398, type: "poi", desc: "World-heritage colossal wooden hall housing 15m bronze Daibutsu." },
-          { name: "Kasuga Taisha Shrine", lat: 34.6814, lng: 135.8484, type: "poi", desc: "Primeval forest shrine lined with 3,000 stone and bronze lanterns." },
-          { name: "Naramachi Preservation District", lat: 34.6780, lng: 135.8305, type: "poi", desc: "Merchant street tea stroll before catching rapid train back to Kyoto." },
-          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Night 4 in Kyoto." }
+          {
+            name: "Kyoto Station",
+            lat: 34.9858, lng: 135.7588,
+            type: "transit",
+            desc: "JR Miyakoji Rapid to Nara (~45 min, ¥720).",
+            narrative: "Hop on the JR Miyakoji Rapid from Kyoto Station, zipping south through Yamashiro tea fields directly into ancient Nara in 45 minutes.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Kyoto Station JR platforms" },
+              { url: "https://images.unsplash.com/photo-1570459027562-4a916cc6113f?w=900&auto=format&fit=crop&q=80", caption: "Rolling countryside en route to Nara" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Arrival into historic Nara station" }
+            ]
+          },
+          {
+            name: "Nakatanidou Yomogi Mochi",
+            lat: 34.6818, lng: 135.8285,
+            type: "poi",
+            desc: "Watch high-speed mochi pounding demonstration; grab warm mochi.",
+            narrative: "National champions of high-speed mochi pounding (mochitsuki). Giant wooden mallets strike the steaming green mugwort rice dough at lightning speed before serving it warm, dusted with sweet soybean kinako.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Master bakers pounding mochi with giant wooden mallets" },
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Warm, pillowy fresh yomogi mochi dusted in kinako" },
+              { url: "https://images.unsplash.com/photo-1570459027562-4a916cc6113f?w=900&auto=format&fit=crop&q=80", caption: "Crowds gathered around the lively demonstration" }
+            ]
+          },
+          {
+            name: "Nara Park Sika Deer",
+            lat: 34.6850, lng: 135.8430,
+            type: "poi",
+            desc: "Meet sacred bowing wild deer in the park.",
+            narrative: "Over 1,200 wild sika deer roam freely across Nara's ancient parklands. Considered sacred messengers of the Shinto gods, these polite deer bow gracefully to visitors in exchange for shika-senbei rice crackers.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1570459027562-4a916cc6113f?w=900&auto=format&fit=crop&q=80", caption: "A gentle sacred sika deer bowing politely in Nara Park" },
+              { url: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=900&auto=format&fit=crop&q=80", caption: "Deer resting on the ancient lawns under autumn foliage" },
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Deer gathered peacefully near ancient temple gates" }
+            ]
+          },
+          {
+            name: "Tōdai-ji (Great Buddha)",
+            lat: 34.6890, lng: 135.8398,
+            type: "poi",
+            desc: "World-heritage colossal wooden hall housing 15m bronze Daibutsu.",
+            narrative: "One of the world's largest wooden buildings, housing the colossal 15-meter bronze Daibutsu (Great Buddha), cast in 752 AD to protect Japan. Enter past the fierce 8-meter wooden Niō guardian statues in Nandaimon Gate.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=900&auto=format&fit=crop&q=80", caption: "The massive wooden Daibutsuden hall of Tōdai-ji" },
+              { url: "https://images.unsplash.com/photo-1570459027562-4a916cc6113f?w=900&auto=format&fit=crop&q=80", caption: "The colossal 15-meter bronze Great Buddha (Daibutsu)" },
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Nandaimon Gate with 800-year-old wooden guardians" }
+            ]
+          },
+          {
+            name: "Kasuga Taisha Shrine",
+            lat: 34.6814, lng: 135.8484,
+            type: "poi",
+            desc: "Primeval forest shrine lined with 3,000 stone and bronze lanterns.",
+            narrative: "Founded in 768 AD in a sacred primeval forest, Kasuga Taisha is celebrated for its 3,000 mossy stone lanterns lining cedar pathways and bronze hanging lanterns adorning vermilion cloister hallways.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Mossy stone lanterns lining the forest path" },
+              { url: "https://images.unsplash.com/photo-1570459027562-4a916cc6113f?w=900&auto=format&fit=crop&q=80", caption: "Bronze hanging lanterns along the vermilion cloisters" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Ancient primeval forest surrounding the shrine" }
+            ]
+          },
+          {
+            name: "Naramachi Preservation District",
+            lat: 34.6780, lng: 135.8305,
+            type: "poi",
+            desc: "Merchant street tea stroll before catching rapid train back to Kyoto.",
+            narrative: "Nara's former merchant quarter featuring preserved Edo machiya townhouses with hanging red monkey migawari amulets, craft sake breweries, and peaceful tea salons.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1570459027562-4a916cc6113f?w=900&auto=format&fit=crop&q=80", caption: "Preserved Edo machiya merchant street in Naramachi" },
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Migawari-zaru lucky monkey charms adorning eaves" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Artisan craft boutiques and quiet tea lanes" }
+            ]
+          },
+          {
+            name: "Higashiyama Base",
+            lat: 34.9986, lng: 135.7806,
+            type: "hotel",
+            desc: "Night 4 in Kyoto.",
+            narrative: "Return to Kyoto aboard the evening rapid train, resting up in Higashiyama with no hotel transfer needed.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Evening tranquility in Higashiyama" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Historic Kyoto nighttime glow" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Peaceful rest in your 8-night base" }
+            ]
+          }
         ]
       },
       {
@@ -537,10 +1486,54 @@
         title: "Osaka Street Food & Neon Day Trip",
         base: "Base 3: Kyoto Higashiyama (Night 5 of 8)",
         steps: [
-          { name: "Kyoto Station", lat: 34.9858, lng: 135.7588, type: "transit", desc: "Quick train to Osaka (15–30 min). Bags stay safely in Kyoto!" },
-          { name: "Dōtonbori Canal & Glico Sign", lat: 34.6687, lng: 135.5013, type: "poi", desc: "Pulsing neon street food haven: piping hot takoyaki & street life." },
-          { name: "Shinsekai & Tsūtenkaku Tower", lat: 34.6525, lng: 135.5063, type: "poi", desc: "Tsūtenkaku observation deck (¥1,500 timed ticket) & kushikatsu skewers dinner." },
-          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Return train to Kyoto for a comfortable night in your home base." }
+          {
+            name: "Kyoto Station",
+            lat: 34.9858, lng: 135.7588,
+            type: "transit",
+            desc: "Quick train to Osaka (15–30 min). Bags stay safely in Kyoto!",
+            narrative: "A painless 15-minute Shinkansen or 28-minute JR Special Rapid ride links Kyoto to Osaka. Your luggage stays safely at your Kyoto base.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Rapid transit corridor connecting Kyoto to Osaka" },
+              { url: "https://images.unsplash.com/photo-1590559899731-a372a1464e29?w=900&auto=format&fit=crop&q=80", caption: "Arrival into bustling downtown Osaka" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Modern skyline of Kansai's culinary capital" }
+            ]
+          },
+          {
+            name: "Dōtonbori Canal & Glico Sign",
+            lat: 34.6687, lng: 135.5013,
+            type: "poi",
+            desc: "Pulsing neon street food haven: piping hot takoyaki & street life.",
+            narrative: "The roaring heart of Osaka's 'kuidaore' (eat until you drop) food philosophy. Gaze at the historic 1935 Glico Running Man neon sign, giant moving crab animatronics, and eat hot takoyaki octopus balls topped with dancing bonito flakes.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1590559899731-a372a1464e29?w=900&auto=format&fit=crop&q=80", caption: "The iconic Glico Running Man neon sign over Dōtonbori canal" },
+              { url: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=900&auto=format&fit=crop&q=80", caption: "Piping hot octopus takoyaki street food stalls" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Pulsing evening neon reflections across the canal waters" }
+            ]
+          },
+          {
+            name: "Shinsekai & Tsūtenkaku Tower",
+            lat: 34.6525, lng: 135.5063,
+            type: "poi",
+            desc: "Tsūtenkaku observation deck (¥1,500 timed ticket) & kushikatsu skewers dinner.",
+            narrative: "Osaka's nostalgic 1912 retro district, built to mirror Paris and New York's Coney Island. Indulge in crispy golden kushikatsu skewers (remember: no double dipping!), rub the feet of the Billiken luck god, and gaze down from Tsūtenkaku Tower.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=900&auto=format&fit=crop&q=80", caption: "Retro Tsūtenkaku Tower rising above Shinsekai's lantern alleys" },
+              { url: "https://images.unsplash.com/photo-1590559899731-a372a1464e29?w=900&auto=format&fit=crop&q=80", caption: "Crispy deep-fried golden kushikatsu skewers dinner" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Nostalgic 1950s showa-era atmosphere in Shinsekai" }
+            ]
+          },
+          {
+            name: "Higashiyama Base",
+            lat: 34.9986, lng: 135.7806,
+            type: "hotel",
+            desc: "Return train to Kyoto for a comfortable night in your home base.",
+            narrative: "Hop on the rapid train back to Kyoto, returning to your quiet Higashiyama neighborhood away from the neon buzz.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Return to the peaceful cobblestones of Higashiyama" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Serene night atmosphere in historic Kyoto" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Restful evening in Kyoto base" }
+            ]
+          }
         ]
       },
       {
@@ -549,12 +1542,78 @@
         title: "Uji Tea Capital & Philosopher's Path",
         base: "Base 3: Kyoto Higashiyama (Night 6 of 8)",
         steps: [
-          { name: "Kyoto Station", lat: 34.9858, lng: 135.7588, type: "transit", desc: "Short 20m train south to Uji." },
-          { name: "Byōdō-in Temple (Phoenix Hall)", lat: 34.8893, lng: 135.8077, type: "special", desc: "Arrive 09:10 for same-day Phoenix Hall interior tickets; matcha parfait." },
-          { name: "Philosopher's Path (Tetsugaku-no-Michi)", lat: 35.0235, lng: 135.7955, type: "poi", desc: "Peaceful afternoon stone canal stroll shaded by late autumn trees." },
-          { name: "Ginkaku-ji (Silver Pavilion)", lat: 35.0272, lng: 135.7982, type: "poi", desc: "¥1,000 entry: wabi-sabi dry sand cone, Zen architecture & moss garden." },
-          { name: "Kamogawa Riverbank Twilight", lat: 35.0035, lng: 135.7710, type: "poi", desc: "Sunset walk along the riverbanks; traditional Kyoto dinner." },
-          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Night 6 in Kyoto." }
+          {
+            name: "Kyoto Station",
+            lat: 34.9858, lng: 135.7588,
+            type: "transit",
+            desc: "Short 20m train south to Uji.",
+            narrative: "A brisk 20-minute JR train takes you to Uji, Japan's green tea capital renowned for producing shade-grown matcha since the 12th century.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "JR train heading south to the Uji river valley" },
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Rolling tea plantations surrounding Uji" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "The historic Uji River crossing" }
+            ]
+          },
+          {
+            name: "Byōdō-in Temple (Phoenix Hall)",
+            lat: 34.8893, lng: 135.8077,
+            type: "special",
+            desc: "Arrive 09:10 for same-day Phoenix Hall interior tickets; matcha parfait.",
+            narrative: "Built in 1053 to represent the Pure Land Buddhist paradise on Earth, Byōdō-in's Phoenix Hall is immortalized on the Japanese 10-yen coin. Crowned by two golden phoenixes, it reflects gracefully over its surrounding pond.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "The iconic Phoenix Hall of Byōdō-in reflecting on its pond" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Twin bronze phoenixes crowning the ancient cedar roof" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Rich matcha parfait and artisanal green tea in Uji" }
+            ]
+          },
+          {
+            name: "Philosopher's Path (Tetsugaku-no-Michi)",
+            lat: 35.0235, lng: 135.7955,
+            type: "poi",
+            desc: "Peaceful afternoon stone canal stroll shaded by late autumn trees.",
+            narrative: "A stone pathway following a peaceful canal beneath cherry and maple trees where Japan's influential 20th-century philosopher Nishida Kitarō meditated during his daily university walks.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Stone-paved canal pathway of Philosopher's Path" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Late autumn maples lining the quiet canal banks" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Small stone bridges and peaceful tea nooks" }
+            ]
+          },
+          {
+            name: "Ginkaku-ji (Silver Pavilion)",
+            lat: 35.0272, lng: 135.7982,
+            type: "poi",
+            desc: "¥1,000 entry: wabi-sabi dry sand cone, Zen architecture & moss garden.",
+            narrative: "The birthplace of Higashiyama culture. Designed as a retreat for Shogun Ashikaga Yoshimasa, it embodies wabi-sabi aesthetics with its meticulously raked dry sand Sea of Silver Sand and the iconic Moon-Viewing Sand Cone.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "The Kogetsudai conical dry sand mountain at Ginkaku-ji" },
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Minimalist Zen wooden architecture surrounded by moss gardens" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Walking trail overlooking the temple roofs and Kyoto valley" }
+            ]
+          },
+          {
+            name: "Kamogawa Riverbank Twilight",
+            lat: 35.0035, lng: 135.7710,
+            type: "poi",
+            desc: "Sunset walk along the riverbanks; traditional Kyoto dinner.",
+            narrative: "Watch dusk settle over the Kamogawa River as herons fish in the currents and traditional wooden restaurant verandas reflect off the rippling water.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Twilight reflections along the tranquil Kamogawa riverbanks" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Locals and travelers strolling the river path at dusk" },
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Lanterns glowing on the eastern bank of the river" }
+            ]
+          },
+          {
+            name: "Higashiyama Base",
+            lat: 34.9986, lng: 135.7806,
+            type: "hotel",
+            desc: "Night 6 in Kyoto.",
+            narrative: "Night 6 at your Higashiyama home, rested and ready for tomorrow's castle day trip.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Higashiyama night serenity" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Preserved historic neighborhood at night" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Kyoto home base comfort" }
+            ]
+          }
         ]
       },
       {
@@ -563,11 +1622,66 @@
         title: "Himeji Castle Day Trip from Kyoto",
         base: "Base 3: Kyoto Higashiyama (Night 7 of 8)",
         steps: [
-          { name: "Kyoto Station", lat: 34.9858, lng: 135.7588, type: "transit", desc: "JR Special Rapid (07:14 -> 08:49, 95m, ¥2,210) or Shinkansen Hikari 731 (07:20 -> 08:03, 43m)." },
-          { name: "Himeji Castle (White Heron)", lat: 34.8394, lng: 134.6939, type: "poi", desc: "Japan's premier original 1609 feudal keep from 09:00 (¥2,500, or ¥2,600 with Kōko-en)." },
-          { name: "Kōko-en Garden", lat: 34.8385, lng: 134.6908, type: "poi", desc: "Nine distinct Edo-style walled garden ponds adjacent to the castle moat." },
-          { name: "Himeji Station", lat: 34.8275, lng: 134.6905, type: "transit", desc: "Return to Kyoto (Special Rapid 14:12 -> 15:44 or Hikari 712 14:11 -> 15:02)." },
-          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Forward big bags to Hakone ryokan via Yamato! Optional Eikan-dō evening light-up. Night 7." }
+          {
+            name: "Kyoto Station",
+            lat: 34.9858, lng: 135.7588,
+            type: "transit",
+            desc: "JR Special Rapid (07:14 -> 08:49, 95m, ¥2,210) or Shinkansen Hikari 731 (07:20 -> 08:03, 43m).",
+            narrative: "Hop on the high-speed Hikari Shinkansen or Special Rapid westward past Kobe directly to Himeji in Hyogo Prefecture.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "High speed westward bullet train journey" },
+              { url: "https://images.unsplash.com/photo-1570783478988-c71c4c9657b9?w=900&auto=format&fit=crop&q=80", caption: "Approaching Himeji city and its white castle keep" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Arrival at Himeji Station concourse" }
+            ]
+          },
+          {
+            name: "Himeji Castle (White Heron)",
+            lat: 34.8394, lng: 134.6939,
+            type: "poi",
+            desc: "Japan's premier original 1609 feudal keep from 09:00 (¥2,500, or ¥2,600 with Kōko-en).",
+            narrative: "Japan's finest surviving 17th-century feudal fortress and first UNESCO World Heritage site. Famed as the 'White Heron Castle' for its brilliant white plaster walls resembling a bird in flight, it features 83 defensive buildings, spiral defense gates, and an intact 6-story main keep.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1570783478988-c71c4c9657b9?w=900&auto=format&fit=crop&q=80", caption: "The soaring multi-tiered White Heron keep of Himeji Castle" },
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Impenetrable stone ramparts and spiral defensive gates" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "View from the castle moat framed by late autumn foliage" }
+            ]
+          },
+          {
+            name: "Kōko-en Garden",
+            lat: 34.8385, lng: 134.6908,
+            type: "poi",
+            desc: "Nine distinct Edo-style walled garden ponds adjacent to the castle moat.",
+            narrative: "Constructed on the historic site of samurai lord residences, Kōko-en comprises nine distinct Edo-style walled gardens featuring cascading waterfalls, tea pavilions, and hundreds of colorful koi.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Edo-style garden pond with colorful swimming Nishikigoi carp" },
+              { url: "https://images.unsplash.com/photo-1570783478988-c71c4c9657b9?w=900&auto=format&fit=crop&q=80", caption: "Samurai walled gardens framing wooden tea pavilions" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Cascading rock waterfalls and autumn maple leaves" }
+            ]
+          },
+          {
+            name: "Himeji Station",
+            lat: 34.8275, lng: 134.6905,
+            type: "transit",
+            desc: "Return to Kyoto (Special Rapid 14:12 -> 15:44 or Hikari 712 14:11 -> 15:02).",
+            narrative: "Catch the Shinkansen Hikari direct back to Kyoto, watching the sunset over the Kansai coastline.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Himeji Station return platform" },
+              { url: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&auto=format&fit=crop&q=80", caption: "Boarding the bullet train back to Kyoto" },
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Kansai sunset through train windows" }
+            ]
+          },
+          {
+            name: "Higashiyama Base",
+            lat: 34.9986, lng: 135.7806,
+            type: "hotel",
+            desc: "Forward big bags to Hakone ryokan via Yamato! Optional Eikan-dō evening light-up. Night 7.",
+            narrative: "Important tip: Send heavy suitcases ahead to your Hakone ryokan via Yamato takkyubin luggage delivery. Travel light for tomorrow's Kinosaki Onsen excursion!",
+            images: [
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Night 7 in historic Higashiyama" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Luggage forwarding simplicity in Japan" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Cozy Kyoto machiya evening" }
+            ]
+          }
         ]
       },
       {
@@ -576,12 +1690,78 @@
         title: "Kinosaki Onsen Coastal Day Trip from Kyoto",
         base: "Base 3: Kyoto Higashiyama (Night 8 of 8)",
         steps: [
-          { name: "Kyoto Station", lat: 34.9858, lng: 135.7588, type: "transit", desc: "Kinosaki 5 (11:25 -> 13:49, ¥5,370) direct through Tanba mountain valleys to the coast." },
-          { name: "Kinosaki Onsen Station", lat: 35.6248, lng: 134.8143, type: "transit", desc: "Arrive 13:49. Pack a daypack; no hotel move today!" },
-          { name: "Otani Willow Canal", lat: 35.6264, lng: 134.8125, type: "poi", desc: "Willow canal walk, Taiko-bashi arched stone bridges, hot crab croquette." },
-          { name: "Gosho-no-yu & Ichino-yu Public Baths", lat: 35.6268, lng: 134.8118, type: "onsen", desc: "Baths ~14:00–16:00: waterfall outdoor bath, cavern bath, and canal foot baths." },
-          { name: "Kinosaki Onsen Station (Return)", lat: 35.6248, lng: 134.8143, type: "transit", desc: "Kinosaki 20 direct (16:31 -> 19:07, ¥5,370) — last direct train back to Kyoto." },
-          { name: "Higashiyama Base", lat: 34.9986, lng: 135.7806, type: "hotel", desc: "Dinner back in Kyoto. Final night (Night 8) in Kyoto." }
+          {
+            name: "Kyoto Station",
+            lat: 34.9858, lng: 135.7588,
+            type: "transit",
+            desc: "Kinosaki 5 (11:25 -> 13:49, ¥5,370) direct through Tanba mountain valleys to the coast.",
+            narrative: "Board the direct Limited Express Kinosaki winding through forested mountain gorges and cedar valleys of Tanba toward the rugged Sea of Japan coast.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Limited express train winding into northern mountain valleys" },
+              { url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&auto=format&fit=crop&q=80", caption: "Forested coastal hills near the Sea of Japan" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Arrival into Kinosaki Onsen station" }
+            ]
+          },
+          {
+            name: "Kinosaki Onsen Station",
+            lat: 35.6248, lng: 134.8143,
+            type: "transit",
+            desc: "Arrive 13:49. Pack a daypack; no hotel move today!",
+            narrative: "Arrive in this 1,300-year-old hot spring sanctuary. Since bags stay in Kyoto, you're free to explore with just a daypack.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&auto=format&fit=crop&q=80", caption: "Kinosaki Onsen welcoming town gate" },
+              { url: "https://images.unsplash.com/photo-1583083527882-4bee9aba2eea?w=900&auto=format&fit=crop&q=80", caption: "Traditional onsen town atmosphere" },
+              { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900&auto=format&fit=crop&q=80", caption: "Steaming hot spring fountains at the station" }
+            ]
+          },
+          {
+            name: "Otani Willow Canal",
+            lat: 35.6264, lng: 134.8125,
+            type: "poi",
+            desc: "Willow canal walk, Taiko-bashi arched stone bridges, hot crab croquette.",
+            narrative: "The soul of Kinosaki: weeping willows drooping gracefully over the Otani River, crossed by arched stone bridges, where visitors stroll in traditional yukata robes and wooden geta clogs.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&auto=format&fit=crop&q=80", caption: "Weeping willows and arched stone bridges over Otani canal" },
+              { url: "https://images.unsplash.com/photo-1583083527882-4bee9aba2eea?w=900&auto=format&fit=crop&q=80", caption: "Traditional ryokans lining the tranquil canal waters" },
+              { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900&auto=format&fit=crop&q=80", caption: "Fresh hot Matsuba snow crab street snacks" }
+            ]
+          },
+          {
+            name: "Gosho-no-yu & Ichino-yu Public Baths",
+            lat: 35.6268, lng: 134.8118,
+            type: "onsen",
+            desc: "Baths ~14:00–16:00: waterfall outdoor bath, cavern bath, and canal foot baths.",
+            narrative: "Known as the 'Water of the Imperial Court', Gosho-no-yu features a dramatic open-air rotemburo bath surrounded by natural rocks and a rushing waterfall.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900&auto=format&fit=crop&q=80", caption: "Steaming open-air waterfall hot spring rotemburo" },
+              { url: "https://images.unsplash.com/photo-1583083527882-4bee9aba2eea?w=900&auto=format&fit=crop&q=80", caption: "Historic timber bathhouse architecture of Gosho-no-yu" },
+              { url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&auto=format&fit=crop&q=80", caption: "Foot baths (ashiyu) along the canal banks" }
+            ]
+          },
+          {
+            name: "Kinosaki Onsen Station (Return)",
+            lat: 35.6248, lng: 134.8143,
+            type: "transit",
+            desc: "Kinosaki 20 direct (16:31 -> 19:07, ¥5,370) — last direct train back to Kyoto.",
+            narrative: "Board the direct Limited Express Kinosaki 20 homeward bound to Kyoto after a deeply relaxing afternoon in the hot springs.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Boarding the direct express train back to Kyoto" },
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Evening shadows settling over the mountains" },
+              { url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&auto=format&fit=crop&q=80", caption: "Warm memories of coastal Kinosaki" }
+            ]
+          },
+          {
+            name: "Higashiyama Base",
+            lat: 34.9986, lng: 135.7806,
+            type: "hotel",
+            desc: "Dinner back in Kyoto. Final night (Night 8) in Kyoto.",
+            narrative: "Celebrate your final night in Kyoto with a relaxed dinner. Tomorrow morning: Shinkansen to Hakone for your private ryokan onsen stay!",
+            images: [
+              { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Final evening in historic Higashiyama" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Kyoto's 8-night home base farewell" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Nighttime lantern ambiance in Kyoto" }
+            ]
+          }
         ]
       },
       {
@@ -590,10 +1770,54 @@
         title: "Direct Shinkansen to Hakone Caldera",
         base: "Base 4: Mountain Ryokan, Hakone (Night 1 of 2)",
         steps: [
-          { name: "Kyoto Station", lat: 34.9858, lng: 135.7588, type: "transit", desc: "Hikari 642 direct (08:33 -> 10:38, 2h05, ¥12,100). Nozomi does not stop at Odawara." },
-          { name: "Odawara Station Hub", lat: 35.2562, lng: 139.1558, type: "transit", desc: "Pick up 2-day Hakone Freepass (¥6,000); Hakone Tozan railway up to Hakone-Yumoto (~11:20)." },
-          { name: "Hakone-Yumoto / Gōra Valley", lat: 35.2325, lng: 139.1050, type: "transit", desc: "Winding switchback mountain railway up the gorges." },
-          { name: "Hakone Rotemburo Ryokan Base", lat: 35.2496, lng: 139.0478, type: "hotel", desc: "Check in 15:00. Private open-air rotemburo bath, kaiseki dinner (Night 1)." }
+          {
+            name: "Kyoto Station",
+            lat: 34.9858, lng: 135.7588,
+            type: "transit",
+            desc: "Hikari 642 direct (08:33 -> 10:38, 2h05, ¥12,100). Nozomi does not stop at Odawara.",
+            narrative: "Board the direct Hikari 642 Shinkansen—crucial because the faster Nozomi skips Odawara. Enjoy views of Mount Fuji on the left side of the train.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Hikari bullet train cruising eastward" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Clear morning vista of Mount Fuji from Shinkansen" },
+              { url: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&auto=format&fit=crop&q=80", caption: "Arriving at Odawara gateway station" }
+            ]
+          },
+          {
+            name: "Odawara Station Hub",
+            lat: 35.2562, lng: 139.1558,
+            type: "transit",
+            desc: "Pick up 2-day Hakone Freepass (¥6,000); Hakone Tozan railway up to Hakone-Yumoto (~11:20).",
+            narrative: "Pick up your 2-day Hakone Freepass at Odawara, granting unlimited rides on mountain trains, cable cars, ropeways, and buses across Hakone's volcanic national park.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Hakone Freepass gateway at Odawara" },
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Hakone mountain national park vista" },
+              { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900&auto=format&fit=crop&q=80", caption: "Entering the cedar-clad mountain valley" }
+            ]
+          },
+          {
+            name: "Hakone-Yumoto / Gōra Valley",
+            lat: 35.2325, lng: 139.1050,
+            type: "transit",
+            desc: "Winding switchback mountain railway up the gorges.",
+            narrative: "Ride the Hakone Tozan mountain railway—Japan's oldest mountain rail—navigating steep 80‰ gradients via three dramatic zigzag switchbacks through mountain gorges.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Hakone Tozan mountain railway climbing steep gorges" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Deep mountain river ravines in Hakone" },
+              { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900&auto=format&fit=crop&q=80", caption: "Mountain switchback rail journey" }
+            ]
+          },
+          {
+            name: "Hakone Rotemburo Ryokan Base",
+            lat: 35.2496, lng: 139.0478,
+            type: "hotel",
+            desc: "Check in 15:00. Private open-air rotemburo bath, kaiseki dinner (Night 1).",
+            narrative: "An authentic hot spring sanctuary in Hakone's forested volcanic valley. Stan & Alfiya unwind in private mineral-rich rotemburo baths and enjoy an exquisite seasonal kaiseki dinner.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900&auto=format&fit=crop&q=80", caption: "Private outdoor rotemburo onsen bath overlooking forest" },
+              { url: "https://images.unsplash.com/photo-1583083527882-4bee9aba2eea?w=900&auto=format&fit=crop&q=80", caption: "Multi-course kaiseki dinner artfully prepared with local delicacies" },
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Tranquil tatami ryokan room and forest mountain views" }
+            ]
+          }
         ]
       },
       {
@@ -602,11 +1826,66 @@
         title: "Hakone Caldera Loop, Black Eggs & Peace Torii",
         base: "Base 4: Mountain Ryokan, Hakone (Night 2 of 2)",
         steps: [
-          { name: "Hakone Ryokan Base", lat: 35.2496, lng: 139.0478, type: "hotel", desc: "Cable car to Sōunzan." },
-          { name: "Ōwakudani Volcanic Valley", lat: 35.2425, lng: 139.0195, type: "poi", desc: "Replacement bus (ropeway closed Dec 7–24). Smoking vents, Mt. Fuji & kuro-tamago black eggs." },
-          { name: "Lake Ashi Shoreline", lat: 35.2014, lng: 139.0306, type: "poi", desc: "Ropeway to Tōgendai; tranquil lakeshore walk (no pirate ship)." },
-          { name: "Hakone Shrine (Peace Torii)", lat: 35.2047, lng: 139.0257, type: "poi", desc: "Iconic submerged vermilion torii (visit early afternoon for 30–60m queue)." },
-          { name: "Hakone Ryokan Base", lat: 35.2496, lng: 139.0478, type: "hotel", desc: "Second evening private bath soak & kaiseki dinner (Night 2)." }
+          {
+            name: "Hakone Ryokan Base",
+            lat: 35.2496, lng: 139.0478,
+            type: "hotel",
+            desc: "Cable car to Sōunzan.",
+            narrative: "Wake up to fresh mountain air, enjoy a traditional ryokan breakfast, and take the Hakone Tozan Cable Car ascending to Sōunzan.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900&auto=format&fit=crop&q=80", caption: "Morning mountain mist over Hakone ryokan" },
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Ascending Sōunzan mountain cable car" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Crisp winter skies over the Hakone caldera" }
+            ]
+          },
+          {
+            name: "Ōwakudani Volcanic Valley",
+            lat: 35.2425, lng: 139.0195,
+            type: "poi",
+            desc: "Replacement bus (ropeway closed Dec 7–24). Smoking vents, Mt. Fuji & kuro-tamago black eggs.",
+            narrative: "'The Great Boiling Valley'—an active volcanic crater formed 3,000 years ago with sulfur fumes and bubbling hot springs. Eat a kuro-tamago (egg boiled black in mineral springs), said to add seven years to your life!",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Smoking sulfur vents of Ōwakudani with Mount Fuji in the background" },
+              { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900&auto=format&fit=crop&q=80", caption: "Kuro-tamago black eggs boiled in volcanic mineral springs" },
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Rugged volcanic terrain of the active Hakone caldera" }
+            ]
+          },
+          {
+            name: "Lake Ashi Shoreline",
+            lat: 35.2014, lng: 139.0306,
+            type: "poi",
+            desc: "Ropeway to Tōgendai; tranquil lakeshore walk (no pirate ship).",
+            narrative: "A scenic volcanic crater lake formed along the southwest wall of the caldera. Enjoy tranquil shoreline promenades framed by towering cryptomeria cedars.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Lake Ashi's cobalt waters reflecting Mount Fuji" },
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Tranquil shoreline forest path lined with ancient cedars" },
+              { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900&auto=format&fit=crop&q=80", caption: "Calm winter waters of the caldera lake" }
+            ]
+          },
+          {
+            name: "Hakone Shrine (Peace Torii)",
+            lat: 35.2047, lng: 139.0257,
+            type: "poi",
+            desc: "Iconic submerged vermilion torii (visit early afternoon for 30–60m queue).",
+            narrative: "Founded in 757 AD, Hakone Shrine's 'Heiwa no Torii' (Torii of Peace) stands submerged directly in the waters of Lake Ashi, honoring peaceful water transport across the mountains.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "The iconic submerged Peace Torii gate of Hakone Shrine in Lake Ashi" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Ancient 800-year-old cryptomeria cedars along the shrine approach" },
+              { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900&auto=format&fit=crop&q=80", caption: "Vermilion lanterns and sacred mountain waters" }
+            ]
+          },
+          {
+            name: "Hakone Ryokan Base",
+            lat: 35.2496, lng: 139.0478,
+            type: "hotel",
+            desc: "Second evening private bath soak & kaiseki dinner (Night 2).",
+            narrative: "Your second evening of pure relaxation: soak in your private outdoor rotemburo under the stars and savor a second bespoke kaiseki feast.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900&auto=format&fit=crop&q=80", caption: "Private nighttime rotemburo soak under starlit mountain skies" },
+              { url: "https://images.unsplash.com/photo-1583083527882-4bee9aba2eea?w=900&auto=format&fit=crop&q=80", caption: "Second evening kaiseki dinner specialties" },
+              { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Peaceful forest silence at the ryokan" }
+            ]
+          }
         ]
       },
       {
@@ -615,11 +1894,66 @@
         title: "Romancecar to Shinjuku & Shibuya Night",
         base: "Base 5: Shinjuku, Tokyo (Night 1 of 4)",
         steps: [
-          { name: "Hakone-Yumoto Station", lat: 35.2325, lng: 139.1050, type: "transit", desc: "Odakyu Romancecar straight to Shinjuku (~85–105 min, ¥2,420)." },
-          { name: "Shinjuku Hotel Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Check in to 4-night skyscraper base." },
-          { name: "Shibuya Crossing", lat: 35.6595, lng: 139.7005, type: "poi", desc: "5-minute hop to experience the world's busiest pedestrian crossing." },
-          { name: "Kabukichō & Omoide Yokochō", lat: 35.6932, lng: 139.6997, type: "poi", desc: "Lantern-lit yakitori skewers and crispy gyoza beside train tracks." },
-          { name: "Shinjuku Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Night 1 in Shinjuku." }
+          {
+            name: "Hakone-Yumoto Station",
+            lat: 35.2325, lng: 139.1050,
+            type: "transit",
+            desc: "Odakyu Romancecar straight to Shinjuku (~85–105 min, ¥2,420).",
+            narrative: "Board the Odakyu Romancecar express train from Hakone-Yumoto, whisking you directly into Shinjuku Station without changing lines.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "The sleek Odakyu Romancecar limited express train" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Suburban Tokyo views en route from Hakone" },
+              { url: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&auto=format&fit=crop&q=80", caption: "Arrival into Shinjuku Station's bustling terminals" }
+            ]
+          },
+          {
+            name: "Shinjuku Hotel Base",
+            lat: 35.6909, lng: 139.7003,
+            type: "hotel",
+            desc: "Check in to 4-night skyscraper base.",
+            narrative: "Check in to your final base: a modern skyscraper hotel in Shinjuku, Tokyo's premier entertainment, dining, and transit hub.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Shinjuku skyscraper skyline at dusk" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Modern hotel comfort high above Tokyo" },
+              { url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=900&auto=format&fit=crop&q=80", caption: "Pulsing neon streets around Shinjuku base" }
+            ]
+          },
+          {
+            name: "Shibuya Crossing",
+            lat: 35.6595, lng: 139.7005,
+            type: "poi",
+            desc: "5-minute hop to experience the world's busiest pedestrian crossing.",
+            narrative: "The pulsing heartbeat of Tokyo. Up to 3,000 pedestrians cross simultaneously from every direction with each light change, framed by massive video screens and neon.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Shibuya Crossing's iconic scramble intersection at night" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Towering neon billboards and pulsing crowds" },
+              { url: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&auto=format&fit=crop&q=80", caption: "The loyal dog Hachikō bronze statue in Shibuya" }
+            ]
+          },
+          {
+            name: "Kabukichō & Omoide Yokochō",
+            lat: 35.6932, lng: 139.6997,
+            type: "poi",
+            desc: "Lantern-lit yakitori skewers and crispy gyoza beside train tracks.",
+            narrative: "'Memory Lane' (Omoide Yokochō): a collection of tiny, lantern-lit stalls along the railway tracks grilling smoky charcoal yakitori and serving cold draft beer.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=900&auto=format&fit=crop&q=80", caption: "Red paper lanterns glowing along Omoide Yokochō alley" },
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Charcoal-grilled smoky yakitori skewers" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Kabukichō neon archway and vibrant nightlife" }
+            ]
+          },
+          {
+            name: "Shinjuku Base",
+            lat: 35.6909, lng: 139.7003,
+            type: "hotel",
+            desc: "Night 1 in Shinjuku.",
+            narrative: "Night 1 of 4 at your Shinjuku hotel base, right in the center of Tokyo's energy.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Nighttime cityscape from Shinjuku" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Comfortable urban sanctuary" },
+              { url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=900&auto=format&fit=crop&q=80", caption: "Shinjuku night skyline" }
+            ]
+          }
         ]
       },
       {
@@ -628,10 +1962,54 @@
         title: "HiSUi Cultural Salon & Sunset Shibuya Sky",
         base: "Base 5: Shinjuku, Tokyo (Night 2 of 4)",
         steps: [
-          { name: "Shinjuku Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Marunouchi Line 16 min to Ginza." },
-          { name: "HiSUi TOKYO (Ginza)", lat: 35.6708, lng: 139.7675, type: "special", desc: "⚔️ Tea ceremony ×2 + Batto (real-sword katana test-cutting) for Stan (~1h30, ¥44,000)." },
-          { name: "Shibuya Sky (Sunset Band)", lat: 35.6585, lng: 139.7013, type: "special", desc: "360° open-air rooftop observation deck in the sunset band (15:00+, ¥3,400/person)." },
-          { name: "Shinjuku Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Night 2 in Shinjuku." }
+          {
+            name: "Shinjuku Base",
+            lat: 35.6909, lng: 139.7003,
+            type: "hotel",
+            desc: "Marunouchi Line 16 min to Ginza.",
+            narrative: "Take the direct Tokyo Metro Marunouchi Line from Shinjuku straight to Ginza for your cultural immersion morning.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Tokyo Metro clean transit network" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Ginza luxury avenue streetscapes" },
+              { url: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&auto=format&fit=crop&q=80", caption: "Heading to HiSUi cultural academy" }
+            ]
+          },
+          {
+            name: "HiSUi TOKYO (Ginza)",
+            lat: 35.6708, lng: 139.7675,
+            type: "special",
+            desc: "⚔️ Tea ceremony ×2 + Batto (real-sword katana test-cutting) for Stan (~1h30, ¥44,000).",
+            narrative: "An authentic cultural academy in Ginza where Stan practices Battōdō—the art of real-sword samurai test-cutting against rolled tatami mats—followed by an authentic tea ceremony.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Samurai katana sword demonstration in traditional dojo" },
+              { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Traditional tea ceremony (chanoyu) preparation with matcha whisk" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Serene tatami tea salon inside HiSUi TOKYO" }
+            ]
+          },
+          {
+            name: "Shibuya Sky (Sunset Band)",
+            lat: 35.6585, lng: 139.7013,
+            type: "special",
+            desc: "360° open-air rooftop observation deck in the sunset band (15:00+, ¥3,400/person).",
+            narrative: "Perched 229 meters directly above Shibuya Crossing, this open-air rooftop observatory offers 360-degree panoramic vistas of the Tokyo metropolis extending to Mount Fuji.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Shibuya Sky open-air glass rooftop observatory at sunset" },
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Panoramic views over Tokyo skyline with Mount Fuji silhouette" },
+              { url: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&auto=format&fit=crop&q=80", caption: "Night city lights stretching to the horizon" }
+            ]
+          },
+          {
+            name: "Shinjuku Base",
+            lat: 35.6909, lng: 139.7003,
+            type: "hotel",
+            desc: "Night 2 in Shinjuku.",
+            narrative: "Night 2 in Shinjuku. Grab a late bite or craft cocktails nearby.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Shinjuku skyline views" },
+              { url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=900&auto=format&fit=crop&q=80", caption: "Neon evening atmosphere" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Restful stay in Tokyo" }
+            ]
+          }
         ]
       },
       {
@@ -640,13 +2018,90 @@
         title: "Kamakura, Yokohama & teamLab Planets",
         base: "Base 5: Shinjuku, Tokyo (Night 3 of 4)",
         steps: [
-          { name: "Shinjuku Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Morning train south to Kamakura." },
-          { name: "Kōtoku-in (Great Buddha)", lat: 35.3168, lng: 139.5357, type: "poi", desc: "Enoden tram to 13th-century outdoor bronze Daibutsu." },
-          { name: "Komachi-dōri & Tsurugaoka Hachimangū", lat: 35.3260, lng: 139.5564, type: "poi", desc: "Giraffa crispy cheese curry pan & grand samurai shrine." },
-          { name: "Hōkoku-ji Bamboo Temple", lat: 35.3199, lng: 139.5694, type: "poi", desc: "Bamboo garden matcha tea (last order 15:30)." },
-          { name: "Yokohama Chinatown", lat: 35.4431, lng: 139.6455, type: "poi", desc: "Minato Mirai waterfront and early Chinatown dinner." },
-          { name: "teamLab Planets (Toyosu)", lat: 35.6491, lng: 139.7898, type: "special", desc: "✨ Evening timed slot: wade barefoot through crystal & water infinity art rooms." },
-          { name: "Shinjuku Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Night 3 in Shinjuku." }
+          {
+            name: "Shinjuku Base",
+            lat: 35.6909, lng: 139.7003,
+            type: "hotel",
+            desc: "Morning train south to Kamakura.",
+            narrative: "Board the JR Shonan-Shinjuku Line south from Shinjuku, traveling directly to the samurai seaside capital of Kamakura in under an hour.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "JR Shonan-Shinjuku line departing Tokyo" },
+              { url: "https://images.unsplash.com/photo-1570783478988-c71c4c9657b9?w=900&auto=format&fit=crop&q=80", caption: "Coastline approaching Kamakura" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Enoden retro coastal tramway" }
+            ]
+          },
+          {
+            name: "Kōtoku-in (Great Buddha)",
+            lat: 35.3168, lng: 139.5357,
+            type: "poi",
+            desc: "Enoden tram to 13th-century outdoor bronze Daibutsu.",
+            narrative: "Dating to 1252, this 121-ton monumental outdoor bronze statue of Amida Buddha originally sat inside a wooden hall destroyed by a 15th-century tsunami, leaving the Great Buddha serene under the open sky.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1570783478988-c71c4c9657b9?w=900&auto=format&fit=crop&q=80", caption: "The monumental 13th-century outdoor Great Buddha of Kamakura" },
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Ancient bronze patina framed by pine and cedar trees" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Peaceful temple courtyard of Kōtoku-in" }
+            ]
+          },
+          {
+            name: "Komachi-dōri & Tsurugaoka Hachimangū",
+            lat: 35.3260, lng: 139.5564,
+            type: "poi",
+            desc: "Giraffa crispy cheese curry pan & grand samurai shrine.",
+            narrative: "Kamakura's bustling shopping lane, famous for Giraffa's crispy cheese curry pan, leading to Tsurugaoka Hachimangū—the grand shrine of the Minamoto samurai shogunate.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Tsurugaoka Hachimangū grand samurai shrine staircase" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Komachi-dōri artisanal food shops and street snacks" },
+              { url: "https://images.unsplash.com/photo-1570783478988-c71c4c9657b9?w=900&auto=format&fit=crop&q=80", caption: "Vermilion bridge and lotus ponds at the shrine" }
+            ]
+          },
+          {
+            name: "Hōkoku-ji Bamboo Temple",
+            lat: 35.3199, lng: 139.5694,
+            type: "poi",
+            desc: "Bamboo garden matcha tea (last order 15:30).",
+            narrative: "Celebrated for its grove of 2,000 towering mōsō bamboo stalks. Savor a bowl of freshly whisked matcha at the garden tea arbor while listening to the wind through the bamboo.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=900&auto=format&fit=crop&q=80", caption: "Towering mōsō bamboo stalks in Hōkoku-ji temple grove" },
+              { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Whisked matcha tea served inside the bamboo garden arbor" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Ancient stone lanterns and moss paths" }
+            ]
+          },
+          {
+            name: "Yokohama Chinatown",
+            lat: 35.4431, lng: 139.6455,
+            type: "poi",
+            desc: "Minato Mirai waterfront and early Chinatown dinner.",
+            narrative: "Japan's largest Chinatown, established in 1859. Stroll through ornate paifang gates and enjoy steamed soup dumplings (xiao long bao) and Peking duck.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Yokohama Chinatown's grand ornamental Paifang gate" },
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Steaming dim sum and dumpling street vendors" },
+              { url: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&auto=format&fit=crop&q=80", caption: "Minato Mirai waterfront skyline at dusk" }
+            ]
+          },
+          {
+            name: "teamLab Planets (Toyosu)",
+            lat: 35.6491, lng: 139.7898,
+            type: "special",
+            desc: "✨ Evening timed slot: wade barefoot through crystal & water infinity art rooms.",
+            narrative: "A world-renowned immersive digital art museum where visitors walk barefoot through water, losing physical boundaries inside infinity crystal mirrors and floating orchid gardens.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=900&auto=format&fit=crop&q=80", caption: "The infinite Crystal Universe LED light installation" },
+              { url: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=900&auto=format&fit=crop&q=80", caption: "Wading barefoot through digital projected koi pond water" },
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Floating orchid garden reflecting infinitely across glass" }
+            ]
+          },
+          {
+            name: "Shinjuku Base",
+            lat: 35.6909, lng: 139.7003,
+            type: "hotel",
+            desc: "Night 3 in Shinjuku.",
+            narrative: "Return to Shinjuku for a restful night.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Shinjuku nighttime tranquility" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Restful stay in Tokyo" },
+              { url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=900&auto=format&fit=crop&q=80", caption: "Tokyo skyscraper views" }
+            ]
+          }
         ]
       },
       {
@@ -655,10 +2110,54 @@
         title: "Harajuku, Shopping & Farewell Dinner",
         base: "Base 5: Shinjuku, Tokyo (Night 4 of 4)",
         steps: [
-          { name: "Shinjuku Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Relaxed open morning." },
-          { name: "Harajuku & Omotesandō", lat: 35.6702, lng: 139.7027, type: "poi", desc: "Tree-lined architectural avenues, boutiques, and souvenir browsing." },
-          { name: "Tokyo Farewell Dinner", lat: 35.6938, lng: 139.7034, type: "special", desc: "🏮 Celebratory farewell dinner in Tokyo; final packing." },
-          { name: "Shinjuku Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Final night in Japan." }
+          {
+            name: "Shinjuku Base",
+            lat: 35.6909, lng: 139.7003,
+            type: "hotel",
+            desc: "Relaxed open morning.",
+            narrative: "Sleep in, enjoy a leisurely breakfast, and prepare for a relaxed final full day of souvenir shopping and architectural strolls in Tokyo.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Morning coffee overlooking Tokyo" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Shinjuku morning ambiance" },
+              { url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=900&auto=format&fit=crop&q=80", caption: "Relaxed start to the final full day" }
+            ]
+          },
+          {
+            name: "Harajuku & Omotesandō",
+            lat: 35.6702, lng: 139.7027,
+            type: "poi",
+            desc: "Tree-lined architectural avenues, boutiques, and souvenir browsing.",
+            narrative: "Tokyo's architectural showcase avenue, shaded by towering zelkova trees, featuring flagship design boutiques, traditional craft shops, and cafes.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Zelkova tree-lined Omotesandō architectural boulevard" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Striking modern architecture along Omotesandō" },
+              { url: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&auto=format&fit=crop&q=80", caption: "Trendy boutiques and specialty cafes" }
+            ]
+          },
+          {
+            name: "Tokyo Farewell Dinner",
+            lat: 35.6938, lng: 139.7034,
+            type: "special",
+            desc: "🏮 Celebratory farewell dinner in Tokyo; final packing.",
+            narrative: "A celebratory final dinner to toast Stan & Alfiya's 19-day adventure across 5 bases, from Tokyo and the snowy Alps to Kyoto temples, Hakone onsen baths, and beyond.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Celebratory Japanese banquet and toast" },
+              { url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=900&auto=format&fit=crop&q=80", caption: "Lantern-lit evening dining celebration" },
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Tokyo's sparkling night skyline" }
+            ]
+          },
+          {
+            name: "Shinjuku Base",
+            lat: 35.6909, lng: 139.7003,
+            type: "hotel",
+            desc: "Final night in Japan.",
+            narrative: "Final night in Japan. Pack luggage and prepare for tomorrow's departure flight.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Final night in Shinjuku" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Tokyo city skyline at night" },
+              { url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=900&auto=format&fit=crop&q=80", caption: "Memories of an unforgettable journey" }
+            ]
+          }
         ]
       },
       {
@@ -667,19 +2166,96 @@
         title: "Departure (HND → IAD → YOW)",
         base: "Departure Day (UA804 16:50)",
         steps: [
-          { name: "Shinjuku Hotel Base", lat: 35.6909, lng: 139.7003, type: "hotel", desc: "Relaxed morning. Leave Shinjuku ~13:55: Yamanote to Shinagawa, then Keikyu to HND T3." },
-          { name: "Haneda Airport Terminal 3", lat: 35.5494, lng: 139.7798, type: "transit", desc: "Arrive ~14:40. Flight UA804 departs 16:50 -> IAD 15:40; UA3583 -> YOW arr 19:27." }
+          {
+            name: "Shinjuku Hotel Base",
+            lat: 35.6909, lng: 139.7003,
+            type: "hotel",
+            desc: "Relaxed morning. Leave Shinjuku ~13:55: Yamanote to Shinagawa, then Keikyu to HND T3.",
+            narrative: "Check out smoothly. Catch the Yamanote Line to Shinagawa, then the Keikyu Airport line straight to Haneda Terminal 3 in comfortable time.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Departure morning from Shinjuku" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Direct airport rail connections" },
+              { url: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&auto=format&fit=crop&q=80", caption: "Smooth transit toward Haneda" }
+            ]
+          },
+          {
+            name: "Haneda Airport Terminal 3",
+            lat: 35.5494, lng: 139.7798,
+            type: "transit",
+            desc: "Arrive ~14:40. Flight UA804 departs 16:50 -> IAD 15:40; UA3583 -> YOW arr 19:27.",
+            narrative: "Arrive at Haneda Terminal 3, check in for United Flight UA804 homeward bound, browse duty-free matcha treats, and reflect on 19 days of unforgettable memories.",
+            images: [
+              { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Haneda Airport International Terminal departure gates" },
+              { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Sunset over Haneda runways" },
+              { url: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=900&auto=format&fit=crop&q=80", caption: "Safe travels homeward bound" }
+            ]
+          }
         ]
       }
     ];
 
-    // Master 5 Regional Bases (18 nights total across 5 bases)
+    // Master 5 Regional Bases
     const bases = [
-      { name: "Base 1: Asakusa, Tokyo (2n: Nov 25–26)", lat: 35.7126, lng: 139.7966 },
-      { name: "Base 2: Kanazawa Machiya (2n: Nov 27–28)", lat: 36.5685, lng: 136.6575 },
-      { name: "Base 3: Kyoto Higashiyama (8n: Nov 29–Dec 6)", lat: 34.9986, lng: 135.7806 },
-      { name: "Base 4: Hakone Ryokan (2n: Dec 7–8)", lat: 35.2496, lng: 139.0478 },
-      { name: "Base 5: Shinjuku, Tokyo (4n: Dec 9–12)", lat: 35.6909, lng: 139.7003 }
+      {
+        name: "Base 1: Asakusa, Tokyo (2n: Nov 25–26)",
+        lat: 35.7126, lng: 139.7966,
+        type: "hotel",
+        desc: "Overnight Base 1: Historic low-city Tokyo near Sensō-ji.",
+        narrative: "Your arrival anchor in old Tokyo's shitamachi district, providing quiet lantern-lit walks around Sensō-ji, direct airport subway links, and authentic dining.",
+        images: [
+          { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Asakusa historic lantern gate" },
+          { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Tokyo Skytree over Asakusa" },
+          { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Old Tokyo alleyways" }
+        ]
+      },
+      {
+        name: "Base 2: Kanazawa Machiya (2n: Nov 27–28)",
+        lat: 36.5685, lng: 136.6575,
+        type: "hotel",
+        desc: "Overnight Base 2: Authentic traditional wooden machiya townhouse in Kanazawa.",
+        narrative: "A private traditional machiya featuring cedar architecture, tsuboniwa gardens, and tatami living, perfectly situated between Kenroku-en and the geisha districts.",
+        images: [
+          { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Traditional machiya townhouse" },
+          { url: "https://images.unsplash.com/photo-1578637387939-43c525550085?w=900&auto=format&fit=crop&q=80", caption: "Kenroku-en garden close by" },
+          { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Kanazawa artisan traditions" }
+        ]
+      },
+      {
+        name: "Base 3: Kyoto Higashiyama (8n: Nov 29–Dec 6)",
+        lat: 34.9986, lng: 135.7806,
+        type: "hotel",
+        desc: "Overnight Base 3: Primary 8-night anchor in preserved Higashiyama district.",
+        narrative: "Stan & Alfiya's 8-night home in Kyoto. Walk right out onto stone-paved lanes of Ninenzaka and Sannenzaka, experiencing the ancient capital without bus crowds.",
+        images: [
+          { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&auto=format&fit=crop&q=80", caption: "Higashiyama stone-paved lanes" },
+          { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Yasaka Pagoda silhouette" },
+          { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Peaceful Kyoto machiya base" }
+        ]
+      },
+      {
+        name: "Base 4: Hakone Ryokan (2n: Dec 7–8)",
+        lat: 35.2496, lng: 139.0478,
+        type: "hotel",
+        desc: "Overnight Base 4: Forested hot spring ryokan with private open-air rotemburo.",
+        narrative: "Secluded in Hakone's volcanic cedar gorge. Relax in your private hot mineral rotemburo bath and indulge in nightly seasonal kaiseki dinners.",
+        images: [
+          { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900&auto=format&fit=crop&q=80", caption: "Private rotemburo forest bath" },
+          { url: "https://images.unsplash.com/photo-1583083527882-4bee9aba2eea?w=900&auto=format&fit=crop&q=80", caption: "Bespoke seasonal kaiseki banquet" },
+          { url: "https://images.unsplash.com/photo-1528164344705-475426879c0d?w=900&auto=format&fit=crop&q=80", caption: "Hakone volcanic mountain views" }
+        ]
+      },
+      {
+        name: "Base 5: Shinjuku, Tokyo (4n: Dec 9–12)",
+        lat: 35.6909, lng: 139.7003,
+        type: "hotel",
+        desc: "Overnight Base 5: Modern skyscraper hotel in central Shinjuku.",
+        narrative: "Your Tokyo skyscraper headquarters for the final 4 nights. Unrivaled access to Shibuya, Ginza, Kamakura, and vibrant local izakayas.",
+        images: [
+          { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=900&auto=format&fit=crop&q=80", caption: "Shinjuku skyscraper views" },
+          { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Modern Tokyo urban center" },
+          { url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=900&auto=format&fit=crop&q=80", caption: "Tokyo neon lights at night" }
+        ]
+      }
     ];
 
     // Layers
@@ -688,6 +2264,9 @@
     const macroLayer = L.layerGroup().addTo(map);
 
     let dayMarkersMap = [];
+    let currentDrawerPOI = null;
+    let currentCarouselIndex = 0;
+    let currentCarouselImages = [];
 
     function createMarkerIcon(number, type) {
       let iconClass = "marker-poi";
@@ -716,7 +2295,7 @@
       });
     }
 
-    // Populate Sidebar Cards
+    // Populate Sidebar Day Cards
     const cardsContainer = document.getElementById('dayCardsContainer');
 
     itinerary.forEach(d => {
@@ -746,7 +2325,7 @@
         <div class="day-title">${d.title}</div>
         <div style="font-size:11.5px; color:var(--accent-blue); margin-bottom:4px;">📍 ${d.base}</div>
         <div class="day-timeline">
-          <div style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Day Route Sequence:</div>
+          <div style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Day Route Sequence (Click to view story):</div>
           ${stepsHtml}
         </div>
       `;
@@ -791,7 +2370,13 @@
           <div class="popup-title">${idx + 1}. ${step.name}</div>
           <span class="popup-badge" style="background:rgba(244,63,94,0.15); color:var(--accent-red);">Day ${dayNum} · Stop #${idx + 1}</span>
           <div class="popup-desc">${step.desc}</div>
+          <button class="popup-btn" onclick="openDrawerForStep(${dayNum}, ${idx})">🖼️ View Photos & Story</button>
         `);
+
+        // Marker click opens popup AND pulls out the carousel drawer
+        marker.on('click', () => {
+          openDrawerForStep(dayNum, idx);
+        });
 
         activeMarkersLayer.addLayer(marker);
         dayMarkersMap.push(marker);
@@ -827,12 +2412,155 @@
 
     function zoomToStep(idx, event) {
       if (event) event.stopPropagation();
+      const activeCard = document.querySelector('.day-card.active');
+      if (!activeCard) return;
+      const dayNum = parseInt(activeCard.id.replace('day-card-', ''), 10);
+
       if (dayMarkersMap[idx]) {
         const marker = dayMarkersMap[idx];
         map.flyTo(marker.getLatLng(), 15, { duration: 0.8 });
         marker.openPopup();
       }
+      openDrawerForStep(dayNum, idx);
     }
+
+    // ==========================================
+    // CAROUSEL & POI DRAWER CONTROLLER
+    // ==========================================
+    const poiDrawer = document.getElementById('poiDrawer');
+    const drawerBadge = document.getElementById('drawerBadge');
+    const drawerTitle = document.getElementById('drawerTitle');
+    const drawerSubtitle = document.getElementById('drawerSubtitle');
+    const drawerNarrative = document.getElementById('drawerNarrative');
+    const drawerBaseInfo = document.getElementById('drawerBaseInfo');
+    const drawerScheduleDesc = document.getElementById('drawerScheduleDesc');
+    const drawerCoordinates = document.getElementById('drawerCoordinates');
+    const drawerGmapsLink = document.getElementById('drawerGmapsLink');
+
+    const carouselTrack = document.getElementById('carouselTrack');
+    const carouselDotsContainer = document.getElementById('carouselDots');
+    const carouselCounter = document.getElementById('carouselCounter');
+
+    function openDrawer(poiData) {
+      currentDrawerPOI = poiData;
+      currentCarouselIndex = 0;
+      currentCarouselImages = poiData.images || [];
+
+      // Populate text info
+      drawerBadge.textContent = poiData.typeBadge || "Point of Interest";
+      drawerTitle.textContent = poiData.name;
+      drawerSubtitle.textContent = poiData.subtitle || "";
+      drawerNarrative.textContent = poiData.narrative || poiData.desc || "A highlight stop on Stan & Alfiya's Japanese journey.";
+      drawerBaseInfo.textContent = poiData.base || "Master Corridor";
+      drawerScheduleDesc.textContent = poiData.desc || "Scheduled stop";
+      drawerCoordinates.textContent = `${poiData.lat.toFixed(4)}° N, ${poiData.lng.toFixed(4)}° E`;
+
+      // Google maps link
+      drawerGmapsLink.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(poiData.name + ' ' + (poiData.locationHint || 'Japan'))}`;
+
+      // Build Carousel Slides
+      buildCarouselSlides(currentCarouselImages);
+
+      // Slide drawer into view
+      poiDrawer.classList.add('open');
+    }
+
+    function buildCarouselSlides(images) {
+      carouselTrack.innerHTML = '';
+      carouselDotsContainer.innerHTML = '';
+
+      if (!images || images.length === 0) {
+        images = [
+          { url: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80", caption: "Scenic Japan" },
+          { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&auto=format&fit=crop&q=80", caption: "Historic architecture" },
+          { url: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=900&auto=format&fit=crop&q=80", caption: "Cultural experience" }
+        ];
+        currentCarouselImages = images;
+      }
+
+      images.forEach((imgObj, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'carousel-slide';
+        slide.innerHTML = `
+          <img src="${imgObj.url}" alt="${imgObj.caption || 'Photo'}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900&auto=format&fit=crop&q=80';" />
+          <div class="carousel-slide-caption">${imgObj.caption || ''}</div>
+        `;
+        carouselTrack.appendChild(slide);
+
+        const dot = document.createElement('span');
+        dot.className = `carousel-dot ${i === 0 ? 'active' : ''}`;
+        dot.addEventListener('click', () => jumpToSlide(i));
+        carouselDotsContainer.appendChild(dot);
+      });
+
+      updateCarouselState();
+    }
+
+    function moveCarousel(direction) {
+      if (currentCarouselImages.length <= 1) return;
+      currentCarouselIndex = (currentCarouselIndex + direction + currentCarouselImages.length) % currentCarouselImages.length;
+      updateCarouselState();
+    }
+
+    function jumpToSlide(index) {
+      currentCarouselIndex = index;
+      updateCarouselState();
+    }
+
+    function updateCarouselState() {
+      carouselTrack.style.transform = `translateX(-${currentCarouselIndex * 100}%)`;
+      carouselCounter.textContent = `${currentCarouselIndex + 1} / ${currentCarouselImages.length}`;
+
+      const dots = carouselDotsContainer.querySelectorAll('.carousel-dot');
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentCarouselIndex);
+      });
+    }
+
+    function closeDrawer() {
+      poiDrawer.classList.remove('open');
+    }
+
+    function openDrawerForStep(dayNum, stepIdx) {
+      const dayData = itinerary.find(d => d.day === dayNum);
+      if (!dayData || !dayData.steps[stepIdx]) return;
+      const step = dayData.steps[stepIdx];
+
+      let typeBadge = "Stop #" + (stepIdx + 1);
+      if (step.type === 'hotel') typeBadge = "Accommodation";
+      if (step.type === 'transit') typeBadge = "Transit Hub";
+      if (step.type === 'special') typeBadge = "Curated Highlight";
+      if (step.type === 'onsen') typeBadge = "Onsen Thermal Spring";
+
+      openDrawer({
+        name: step.name,
+        typeBadge: typeBadge,
+        subtitle: `Day ${dayNum} · ${dayData.title}`,
+        desc: step.desc,
+        narrative: step.narrative,
+        base: dayData.base,
+        lat: step.lat,
+        lng: step.lng,
+        images: step.images,
+        locationHint: dayData.base
+      });
+    }
+
+    function recenterMapOnDrawerPOI() {
+      if (currentDrawerPOI) {
+        map.flyTo([currentDrawerPOI.lat, currentDrawerPOI.lng], 16, { duration: 1 });
+      }
+    }
+
+    // Keyboard support: Escape closes drawer, left/right arrows navigate carousel
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDrawer();
+      } else if (poiDrawer.classList.contains('open')) {
+        if (e.key === 'ArrowLeft') moveCarousel(-1);
+        if (e.key === 'ArrowRight') moveCarousel(1);
+      }
+    });
 
     // ==========================================
     // MACRO OVERVIEW (5 REGIONAL BASES)
@@ -864,8 +2592,14 @@
           })
         }).bindPopup(`
           <div class="popup-title">${base.name}</div>
-          <div class="popup-desc">Base accommodation of Stan & Alfiya's 18-night journey.</div>
+          <div class="popup-desc">${base.desc}</div>
+          <button class="popup-btn" onclick="openDrawerForBase('${base.name.replace(/'/g, "\\'")}')">🖼️ View Photos & Details</button>
         `);
+
+        marker.on('click', () => {
+          openDrawerForBase(base.name);
+        });
+
         macroLayer.addLayer(marker);
       });
 
@@ -873,6 +2607,24 @@
         [34.5, 134.5],
         [37.0, 140.0]
       ], { padding: [50, 50], duration: 1.4 });
+    }
+
+    function openDrawerForBase(baseName) {
+      const b = bases.find(item => item.name === baseName);
+      if (!b) return;
+
+      openDrawer({
+        name: b.name,
+        typeBadge: "Regional Base",
+        subtitle: "18-Night Journey Overnight Hub",
+        desc: b.desc,
+        narrative: b.narrative,
+        base: b.name,
+        lat: b.lat,
+        lng: b.lng,
+        images: b.images,
+        locationHint: "Japan"
+      });
     }
 
     // Default to Day 11 (Himeji Castle Day Trip from Kyoto) on launch
