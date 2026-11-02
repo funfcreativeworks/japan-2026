@@ -747,6 +747,14 @@
         </p>
       </div>
 
+      <!-- BOOKED STAY DETAILS (shown for accommodation stops) -->
+      <div id="stayCard" class="narrative-card" style="display:none;">
+        <div class="narrative-header">
+          <span>🏨 Stay Details</span>
+        </div>
+        <div id="stayRows" class="detail-grid" style="margin:0; border:none; padding:0; background:none;"></div>
+      </div>
+
       <!-- PRACTICAL DETAILS -->
       <div class="detail-grid">
         <div class="detail-row">
@@ -821,7 +829,7 @@
         day: 1,
         date: "Wed Nov 25, 2026",
         title: "Tokyo Arrival & Asakusa Settle-in",
-        base: "Base 1: Asakusa, Tokyo (Night 1 of 2)",
+        base: "Base 1: hotel MONday Asakusa (Night 1 of 2)",
         steps: [
           {
             name: "Haneda Airport (HND)",
@@ -836,10 +844,11 @@
             ]
           },
           {
-            name: "Asakusa Hotel Base",
-            lat: 35.7126, lng: 139.7966,
+            name: "hotel MONday Asakusa",
+            lat: 35.7168, lng: 139.7944,
             type: "hotel",
-            desc: "Check in to Asakusa hotel base.",
+            stay: "monday",
+            desc: "Check in to hotel MONday Asakusa (from 16:00). Standard Twin, 2 nights.",
             narrative: "Your welcoming base in Asakusa's historic shitamachi (low-city) district. Within an easy 5-minute stroll of the Sumida River promenade, lantern-lit alleys, and authentic late-night noodle houses.",
             images: [
               { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/Street_in_Asakusa_2025-04-22.jpg/960px-Street_in_Asakusa_2025-04-22.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Asakusa side street with Tokyo Skytree behind", credit: "1904.CC · CC BY 4.0 · Wikimedia Commons" },
@@ -872,9 +881,10 @@
             ]
           },
           {
-            name: "Asakusa Base",
-            lat: 35.7126, lng: 139.7966,
+            name: "hotel MONday Asakusa",
+            lat: 35.7168, lng: 139.7944,
             type: "hotel",
+            stay: "monday",
             desc: "Night 1 in Asakusa.",
             narrative: "Rest up after the transpacific flight in the peaceful evening ambiance of historic Asakusa, ready for tomorrow's full Tokyo exploration.",
             images: [
@@ -889,12 +899,13 @@
         day: 2,
         date: "Thu Nov 26, 2026",
         title: "Sensō-ji, Shinjuku Gyōen, Owls, Akihabara & Ueno",
-        base: "Base 1: Asakusa, Tokyo (Night 2 of 2)",
+        base: "Base 1: hotel MONday Asakusa (Night 2 of 2)",
         steps: [
           {
-            name: "Asakusa Base",
-            lat: 35.7126, lng: 139.7966,
+            name: "hotel MONday Asakusa",
+            lat: 35.7168, lng: 139.7944,
             type: "hotel",
+            stay: "monday",
             desc: "Morning start from Asakusa hotel.",
             narrative: "Early morning start from your Asakusa base to catch Tokyo's historic and natural sights during peaceful morning hours.",
             images: [
@@ -964,9 +975,10 @@
             ]
           },
           {
-            name: "Asakusa Base",
-            lat: 35.7126, lng: 139.7966,
+            name: "hotel MONday Asakusa",
+            lat: 35.7168, lng: 139.7944,
             type: "hotel",
+            stay: "monday",
             desc: "Quick direct 5-minute Ginza Line ride back to Asakusa for dinner. Night 2 in Asakusa.",
             narrative: "Return to your cozy Asakusa base, enjoy a comforting tempura or steaming ramen dinner, and pack your daybags for tomorrow's Shinkansen journey to the Japan Alps.",
             images: [
@@ -981,7 +993,7 @@
         day: 3,
         date: "Fri Nov 27, 2026",
         title: "Kanazawa Arrival, Kimono & Ninja-dera (Birthday)",
-        base: "Base 2: Kanazawa Machiya (Night 1 of 2)",
+        base: "Base 2: APA Hotel Kanazawa Ekimae (Night 1 of 2)",
         steps: [
           {
             name: "Tokyo Station",
@@ -1068,15 +1080,16 @@
             ]
           },
           {
-            name: "Kanazawa Machiya Base",
-            lat: 36.5685, lng: 136.6575,
+            name: "APA Hotel Kanazawa Ekimae",
+            lat: 36.5779, lng: 136.6468,
             type: "hotel",
-            desc: "Return kimonos; birthday celebration dinner; check in to traditional machiya.",
-            narrative: "Settle into your traditional private Kanazawa machiya townhouse, featuring cedar beams, private tsuboniwa courtyard gardens, and tatami living rooms.",
+            stay: "apa",
+            desc: "Return kimonos; birthday celebration dinner; check in to APA Hotel Kanazawa Ekimae (by Kanazawa Station).",
+            narrative: "Settle into APA Hotel Kanazawa Ekimae beside Kanazawa Station: a Semi-double room for 2 nights, steps from the bus terminal for tomorrow's Nohi Bus to Shirakawa-go.",
             images: [
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Higashi_Chaya_District_%2850153813108%29.jpg/960px-Higashi_Chaya_District_%2850153813108%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden lattice facade, Higashi Chaya", credit: "Raita Futo from Tokyo, Japan · CC BY 2.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Kazuemachi_and_the_Asano_River_-_Kanazawa%2C_Japan_-_DSC00068.jpg/960px-Kazuemachi_and_the_Asano_River_-_Kanazawa%2C_Japan_-_DSC00068.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kazuemachi and the Asano River", credit: "Daderot · CC0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/Kazuemachi_-_Kanazawa%2C_Japan_-_DSC00031.jpg/960px-Kazuemachi_-_Kanazawa%2C_Japan_-_DSC00031.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kazuemachi teahouse street", credit: "Daderot · CC0 · Wikimedia Commons" }
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Cityscape_of_Kanazawa_Station_west_exit.jpg/960px-Cityscape_of_Kanazawa_Station_west_exit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kanazawa Station West Exit area (hotel side)", credit: "掬茶 · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/View_of_Kanazawa_Station_building_from_its_West_Exit.jpg/960px-View_of_Kanazawa_Station_building_from_its_West_Exit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kanazawa Station building from the West Exit", credit: "Tbatb · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/Scene_at_Kanazawa_Station_West_Exit_02.jpg/960px-Scene_at_Kanazawa_Station_West_Exit_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kanazawa Station West Exit plaza", credit: "Tbatb · CC BY-SA 4.0 · Wikimedia Commons" }
             ]
           }
         ]
@@ -1085,7 +1098,7 @@
         day: 4,
         date: "Sat Nov 28, 2026",
         title: "Shirakawa-go Farmhouses & Hida Folk Village Excursion",
-        base: "Base 2: Kanazawa Machiya (Night 2 of 2)",
+        base: "Base 2: APA Hotel Kanazawa Ekimae (Night 2 of 2)",
         steps: [
           {
             name: "Kanazawa Bus Terminal",
@@ -1136,15 +1149,16 @@
             ]
           },
           {
-            name: "Kanazawa Machiya Base",
-            lat: 36.5685, lng: 136.6575,
+            name: "APA Hotel Kanazawa Ekimae",
+            lat: 36.5779, lng: 136.6468,
             type: "hotel",
+            stay: "apa",
             desc: "Return to Kanazawa (bus or train via Toyama). Optional Kenroku-en light-up (18:00–21:00).",
-            narrative: "Return to Kanazawa for your final evening in the machiya. Option to bundle up and witness Kenroku-en's enchanting nighttime illumination if open.",
+            narrative: "Return to Kanazawa for your final evening at the station hotel. Option to bundle up and witness Kenroku-en's enchanting nighttime illumination if open.",
             images: [
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Higashi_Chaya_District_%2850153813108%29.jpg/960px-Higashi_Chaya_District_%2850153813108%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden lattice facade, Higashi Chaya", credit: "Raita Futo from Tokyo, Japan · CC BY 2.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Kazuemachi_and_the_Asano_River_-_Kanazawa%2C_Japan_-_DSC00068.jpg/960px-Kazuemachi_and_the_Asano_River_-_Kanazawa%2C_Japan_-_DSC00068.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kazuemachi and the Asano River", credit: "Daderot · CC0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/Kazuemachi_-_Kanazawa%2C_Japan_-_DSC00031.jpg/960px-Kazuemachi_-_Kanazawa%2C_Japan_-_DSC00031.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kazuemachi teahouse street", credit: "Daderot · CC0 · Wikimedia Commons" }
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Cityscape_of_Kanazawa_Station_west_exit.jpg/960px-Cityscape_of_Kanazawa_Station_west_exit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kanazawa Station West Exit area (hotel side)", credit: "掬茶 · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/View_of_Kanazawa_Station_building_from_its_West_Exit.jpg/960px-View_of_Kanazawa_Station_building_from_its_West_Exit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kanazawa Station building from the West Exit", credit: "Tbatb · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/Scene_at_Kanazawa_Station_West_Exit_02.jpg/960px-Scene_at_Kanazawa_Station_West_Exit_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kanazawa Station West Exit plaza", credit: "Tbatb · CC BY-SA 4.0 · Wikimedia Commons" }
             ]
           }
         ]
@@ -1153,7 +1167,7 @@
         day: 5,
         date: "Sun Nov 29, 2026",
         title: "Train to Kyoto & Night Illumination",
-        base: "Base 3: Kyoto Higashiyama (Night 1 of 8)",
+        base: "Base 3: Hale Kyoto Tambaguchi (Night 1 of 8)",
         steps: [
           {
             name: "Kanazawa Station",
@@ -1168,15 +1182,16 @@
             ]
           },
           {
-            name: "Higashiyama Base",
-            lat: 34.9986, lng: 135.7806,
+            name: "Hale Kyoto Tambaguchi (Airbnb)",
+            lat: 34.993, lng: 135.744,
             type: "hotel",
-            desc: "Check in to historic Higashiyama preservation district base (8-night home anchor!).",
-            narrative: "Welcome to your 8-night anchor home in the preserved historic heart of Kyoto. Step straight from your doorstep onto ancient flagstone streets, bypassing crowded buses and train lines.",
+            stay: "hale",
+            desc: "Check in after 15:00 to Hale Kyoto Tambaguchi (Airbnb, entire home) near Tambaguchi / Kyoto Station — 8-night home base.",
+            narrative: "Welcome to your 8-night home in Kyoto: an entire-home king apartment in Shimogyo Ward near Tambaguchi and Kyoto Station, about 25 minutes from Higashiyama.",
             images: [
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Ishibe_Alley_in_Kyoto_2015-03-19.jpg/960px-Ishibe_Alley_in_Kyoto_2015-03-19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji lane, Higashiyama", credit: "Tom Maisey · CC BY 2.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Ishibe_Koji_-_panoramio.jpg/960px-Ishibe_Koji_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji", credit: "Tomi Mäkitalo · CC BY-SA 3.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg/960px-GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden houses on a stone-paved street, Gion", credit: "Josep M. Gracia · CC BY-SA 4.0 · Wikimedia Commons" }
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg/960px-%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Ōmon gate, in the stay's neighbourhood", credit: "KeraKera55 · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/JR_Tambaguchi_Station.jpg/960px-JR_Tambaguchi_Station.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "JR Tambaguchi Station", credit: "Laichuan Yinfu · CC BY-SA 3.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg/960px-Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Sumiyoshi Shrine, nearby", credit: "Molly Des Jardin · CC BY 2.0 · Wikimedia Commons" }
             ]
           },
           {
@@ -1216,15 +1231,16 @@
             ]
           },
           {
-            name: "Higashiyama Base",
-            lat: 34.9986, lng: 135.7806,
+            name: "Hale Kyoto Tambaguchi (Airbnb)",
+            lat: 34.993, lng: 135.744,
             type: "hotel",
+            stay: "hale",
             desc: "Night 1 in Kyoto.",
-            narrative: "Stroll back down the cobblestones directly to your bed. No crowded buses or train rides needed—the magic of staying in Higashiyama.",
+            narrative: "Head back from Higashiyama (about 25 minutes) to your base near Tambaguchi for the night.",
             images: [
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Ishibe_Alley_in_Kyoto_2015-03-19.jpg/960px-Ishibe_Alley_in_Kyoto_2015-03-19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji lane, Higashiyama", credit: "Tom Maisey · CC BY 2.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Ishibe_Koji_-_panoramio.jpg/960px-Ishibe_Koji_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji", credit: "Tomi Mäkitalo · CC BY-SA 3.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg/960px-GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden houses on a stone-paved street, Gion", credit: "Josep M. Gracia · CC BY-SA 4.0 · Wikimedia Commons" }
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg/960px-%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Ōmon gate, in the stay's neighbourhood", credit: "KeraKera55 · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/JR_Tambaguchi_Station.jpg/960px-JR_Tambaguchi_Station.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "JR Tambaguchi Station", credit: "Laichuan Yinfu · CC BY-SA 3.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg/960px-Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Sumiyoshi Shrine, nearby", credit: "Molly Des Jardin · CC BY 2.0 · Wikimedia Commons" }
             ]
           }
         ]
@@ -1233,18 +1249,19 @@
         day: 6,
         date: "Mon Nov 30, 2026",
         title: "Arashiyama Bamboo & River Vistas",
-        base: "Base 3: Kyoto Higashiyama (Night 2 of 8)",
+        base: "Base 3: Hale Kyoto Tambaguchi (Night 2 of 8)",
         steps: [
           {
-            name: "Higashiyama Base",
-            lat: 34.9986, lng: 135.7806,
+            name: "Hale Kyoto Tambaguchi (Airbnb)",
+            lat: 34.993, lng: 135.744,
             type: "hotel",
+            stay: "hale",
             desc: "Randen tram / JR train west to Arashiyama.",
-            narrative: "Depart your Higashiyama base early morning and ride west across Kyoto to the forested foothills of Arashiyama.",
+            narrative: "Depart your Kyoto base early morning and ride west across Kyoto to the forested foothills of Arashiyama.",
             images: [
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Ishibe_Alley_in_Kyoto_2015-03-19.jpg/960px-Ishibe_Alley_in_Kyoto_2015-03-19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji lane, Higashiyama", credit: "Tom Maisey · CC BY 2.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Ishibe_Koji_-_panoramio.jpg/960px-Ishibe_Koji_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji", credit: "Tomi Mäkitalo · CC BY-SA 3.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg/960px-GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden houses on a stone-paved street, Gion", credit: "Josep M. Gracia · CC BY-SA 4.0 · Wikimedia Commons" }
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg/960px-%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Ōmon gate, in the stay's neighbourhood", credit: "KeraKera55 · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/JR_Tambaguchi_Station.jpg/960px-JR_Tambaguchi_Station.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "JR Tambaguchi Station", credit: "Laichuan Yinfu · CC BY-SA 3.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg/960px-Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Sumiyoshi Shrine, nearby", credit: "Molly Des Jardin · CC BY 2.0 · Wikimedia Commons" }
             ]
           },
           {
@@ -1308,15 +1325,16 @@
             ]
           },
           {
-            name: "Higashiyama Base",
-            lat: 34.9986, lng: 135.7806,
+            name: "Hale Kyoto Tambaguchi (Airbnb)",
+            lat: 34.993, lng: 135.744,
             type: "hotel",
+            stay: "hale",
             desc: "Night 2 in Kyoto.",
-            narrative: "A short, pleasant walk from Gion brings you back to your Higashiyama sanctuary for the night.",
+            narrative: "Head back from Gion to your base near Tambaguchi for the night.",
             images: [
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Ishibe_Alley_in_Kyoto_2015-03-19.jpg/960px-Ishibe_Alley_in_Kyoto_2015-03-19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji lane, Higashiyama", credit: "Tom Maisey · CC BY 2.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Ishibe_Koji_-_panoramio.jpg/960px-Ishibe_Koji_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji", credit: "Tomi Mäkitalo · CC BY-SA 3.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg/960px-GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden houses on a stone-paved street, Gion", credit: "Josep M. Gracia · CC BY-SA 4.0 · Wikimedia Commons" }
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg/960px-%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Ōmon gate, in the stay's neighbourhood", credit: "KeraKera55 · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/JR_Tambaguchi_Station.jpg/960px-JR_Tambaguchi_Station.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "JR Tambaguchi Station", credit: "Laichuan Yinfu · CC BY-SA 3.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg/960px-Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Sumiyoshi Shrine, nearby", credit: "Molly Des Jardin · CC BY 2.0 · Wikimedia Commons" }
             ]
           }
         ]
@@ -1325,18 +1343,19 @@
         day: 7,
         date: "Tue Dec 1, 2026",
         title: "Torii Climb, Golden Pavilion & Pontochō",
-        base: "Base 3: Kyoto Higashiyama (Night 3 of 8)",
+        base: "Base 3: Hale Kyoto Tambaguchi (Night 3 of 8)",
         steps: [
           {
-            name: "Higashiyama Base",
-            lat: 34.9986, lng: 135.7806,
+            name: "Hale Kyoto Tambaguchi (Airbnb)",
+            lat: 34.993, lng: 135.744,
             type: "hotel",
+            stay: "hale",
             desc: "Early start south.",
             narrative: "Early start to beat the crowds at Fushimi Inari Taisha before heading to north Kyoto's Golden Pavilion.",
             images: [
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Ishibe_Alley_in_Kyoto_2015-03-19.jpg/960px-Ishibe_Alley_in_Kyoto_2015-03-19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji lane, Higashiyama", credit: "Tom Maisey · CC BY 2.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Ishibe_Koji_-_panoramio.jpg/960px-Ishibe_Koji_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji", credit: "Tomi Mäkitalo · CC BY-SA 3.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg/960px-GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden houses on a stone-paved street, Gion", credit: "Josep M. Gracia · CC BY-SA 4.0 · Wikimedia Commons" }
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg/960px-%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Ōmon gate, in the stay's neighbourhood", credit: "KeraKera55 · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/JR_Tambaguchi_Station.jpg/960px-JR_Tambaguchi_Station.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "JR Tambaguchi Station", credit: "Laichuan Yinfu · CC BY-SA 3.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg/960px-Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Sumiyoshi Shrine, nearby", credit: "Molly Des Jardin · CC BY 2.0 · Wikimedia Commons" }
             ]
           },
           {
@@ -1376,15 +1395,16 @@
             ]
           },
           {
-            name: "Higashiyama Base",
-            lat: 34.9986, lng: 135.7806,
+            name: "Hale Kyoto Tambaguchi (Airbnb)",
+            lat: 34.993, lng: 135.744,
             type: "hotel",
+            stay: "hale",
             desc: "Night 3 in Kyoto.",
-            narrative: "End the day with a relaxed nighttime stroll across the Shijō bridge back to your Higashiyama quarters.",
+            narrative: "End the day with a relaxed nighttime stroll across the Shijō bridge before heading back to your base near Tambaguchi.",
             images: [
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Ishibe_Alley_in_Kyoto_2015-03-19.jpg/960px-Ishibe_Alley_in_Kyoto_2015-03-19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji lane, Higashiyama", credit: "Tom Maisey · CC BY 2.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Ishibe_Koji_-_panoramio.jpg/960px-Ishibe_Koji_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji", credit: "Tomi Mäkitalo · CC BY-SA 3.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg/960px-GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden houses on a stone-paved street, Gion", credit: "Josep M. Gracia · CC BY-SA 4.0 · Wikimedia Commons" }
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg/960px-%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Ōmon gate, in the stay's neighbourhood", credit: "KeraKera55 · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/JR_Tambaguchi_Station.jpg/960px-JR_Tambaguchi_Station.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "JR Tambaguchi Station", credit: "Laichuan Yinfu · CC BY-SA 3.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg/960px-Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Sumiyoshi Shrine, nearby", credit: "Molly Des Jardin · CC BY 2.0 · Wikimedia Commons" }
             ]
           }
         ]
@@ -1393,7 +1413,7 @@
         day: 8,
         date: "Wed Dec 2, 2026",
         title: "Nara Ancient Capital Day Trip",
-        base: "Base 3: Kyoto Higashiyama (Night 4 of 8)",
+        base: "Base 3: Hale Kyoto Tambaguchi (Night 4 of 8)",
         steps: [
           {
             name: "Kyoto Station",
@@ -1468,15 +1488,16 @@
             ]
           },
           {
-            name: "Higashiyama Base",
-            lat: 34.9986, lng: 135.7806,
+            name: "Hale Kyoto Tambaguchi (Airbnb)",
+            lat: 34.993, lng: 135.744,
             type: "hotel",
+            stay: "hale",
             desc: "Night 4 in Kyoto.",
-            narrative: "Return to Kyoto aboard the evening rapid train, resting up in Higashiyama with no hotel transfer needed.",
+            narrative: "Return to Kyoto aboard the evening rapid train and rest up at your base near Kyoto Station.",
             images: [
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Ishibe_Alley_in_Kyoto_2015-03-19.jpg/960px-Ishibe_Alley_in_Kyoto_2015-03-19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji lane, Higashiyama", credit: "Tom Maisey · CC BY 2.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Ishibe_Koji_-_panoramio.jpg/960px-Ishibe_Koji_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji", credit: "Tomi Mäkitalo · CC BY-SA 3.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg/960px-GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden houses on a stone-paved street, Gion", credit: "Josep M. Gracia · CC BY-SA 4.0 · Wikimedia Commons" }
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg/960px-%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Ōmon gate, in the stay's neighbourhood", credit: "KeraKera55 · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/JR_Tambaguchi_Station.jpg/960px-JR_Tambaguchi_Station.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "JR Tambaguchi Station", credit: "Laichuan Yinfu · CC BY-SA 3.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg/960px-Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Sumiyoshi Shrine, nearby", credit: "Molly Des Jardin · CC BY 2.0 · Wikimedia Commons" }
             ]
           }
         ]
@@ -1485,7 +1506,7 @@
         day: 9,
         date: "Thu Dec 3, 2026",
         title: "Osaka Street Food & Neon Day Trip",
-        base: "Base 3: Kyoto Higashiyama (Night 5 of 8)",
+        base: "Base 3: Hale Kyoto Tambaguchi (Night 5 of 8)",
         steps: [
           {
             name: "Kyoto Station",
@@ -1524,15 +1545,16 @@
             ]
           },
           {
-            name: "Higashiyama Base",
-            lat: 34.9986, lng: 135.7806,
+            name: "Hale Kyoto Tambaguchi (Airbnb)",
+            lat: 34.993, lng: 135.744,
             type: "hotel",
+            stay: "hale",
             desc: "Return train to Kyoto for a comfortable night in your home base.",
-            narrative: "Hop on the rapid train back to Kyoto, returning to your quiet Higashiyama neighborhood away from the neon buzz.",
+            narrative: "Hop on the rapid train back to Kyoto, returning to your base near Kyoto Station away from the neon buzz.",
             images: [
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Ishibe_Alley_in_Kyoto_2015-03-19.jpg/960px-Ishibe_Alley_in_Kyoto_2015-03-19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji lane, Higashiyama", credit: "Tom Maisey · CC BY 2.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Ishibe_Koji_-_panoramio.jpg/960px-Ishibe_Koji_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji", credit: "Tomi Mäkitalo · CC BY-SA 3.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg/960px-GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden houses on a stone-paved street, Gion", credit: "Josep M. Gracia · CC BY-SA 4.0 · Wikimedia Commons" }
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg/960px-%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Ōmon gate, in the stay's neighbourhood", credit: "KeraKera55 · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/JR_Tambaguchi_Station.jpg/960px-JR_Tambaguchi_Station.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "JR Tambaguchi Station", credit: "Laichuan Yinfu · CC BY-SA 3.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg/960px-Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Sumiyoshi Shrine, nearby", credit: "Molly Des Jardin · CC BY 2.0 · Wikimedia Commons" }
             ]
           }
         ]
@@ -1541,7 +1563,7 @@
         day: 10,
         date: "Fri Dec 4, 2026",
         title: "Uji Tea Capital & Philosopher's Path",
-        base: "Base 3: Kyoto Higashiyama (Night 6 of 8)",
+        base: "Base 3: Hale Kyoto Tambaguchi (Night 6 of 8)",
         steps: [
           {
             name: "Kyoto Station",
@@ -1604,15 +1626,16 @@
             ]
           },
           {
-            name: "Higashiyama Base",
-            lat: 34.9986, lng: 135.7806,
+            name: "Hale Kyoto Tambaguchi (Airbnb)",
+            lat: 34.993, lng: 135.744,
             type: "hotel",
+            stay: "hale",
             desc: "Night 6 in Kyoto.",
-            narrative: "Night 6 at your Higashiyama home, rested and ready for tomorrow's castle day trip.",
+            narrative: "Night 6 at Hale Kyoto Tambaguchi, rested and ready for tomorrow's castle day trip.",
             images: [
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Ishibe_Alley_in_Kyoto_2015-03-19.jpg/960px-Ishibe_Alley_in_Kyoto_2015-03-19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji lane, Higashiyama", credit: "Tom Maisey · CC BY 2.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Ishibe_Koji_-_panoramio.jpg/960px-Ishibe_Koji_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji", credit: "Tomi Mäkitalo · CC BY-SA 3.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg/960px-GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden houses on a stone-paved street, Gion", credit: "Josep M. Gracia · CC BY-SA 4.0 · Wikimedia Commons" }
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg/960px-%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Ōmon gate, in the stay's neighbourhood", credit: "KeraKera55 · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/JR_Tambaguchi_Station.jpg/960px-JR_Tambaguchi_Station.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "JR Tambaguchi Station", credit: "Laichuan Yinfu · CC BY-SA 3.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg/960px-Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Sumiyoshi Shrine, nearby", credit: "Molly Des Jardin · CC BY 2.0 · Wikimedia Commons" }
             ]
           }
         ]
@@ -1621,7 +1644,7 @@
         day: 11,
         date: "Sat Dec 5, 2026",
         title: "Himeji Castle Day Trip from Kyoto",
-        base: "Base 3: Kyoto Higashiyama (Night 7 of 8)",
+        base: "Base 3: Hale Kyoto Tambaguchi (Night 7 of 8)",
         steps: [
           {
             name: "Kyoto Station",
@@ -1672,15 +1695,16 @@
             ]
           },
           {
-            name: "Higashiyama Base",
-            lat: 34.9986, lng: 135.7806,
+            name: "Hale Kyoto Tambaguchi (Airbnb)",
+            lat: 34.993, lng: 135.744,
             type: "hotel",
+            stay: "hale",
             desc: "Forward big bags to Hakone ryokan via Yamato! Optional Eikan-dō evening light-up. Night 7.",
             narrative: "Important tip: Send heavy suitcases ahead to your Hakone ryokan via Yamato takkyubin luggage delivery. Travel light for tomorrow's Kinosaki Onsen excursion!",
             images: [
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Ishibe_Alley_in_Kyoto_2015-03-19.jpg/960px-Ishibe_Alley_in_Kyoto_2015-03-19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji lane, Higashiyama", credit: "Tom Maisey · CC BY 2.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Ishibe_Koji_-_panoramio.jpg/960px-Ishibe_Koji_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji", credit: "Tomi Mäkitalo · CC BY-SA 3.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg/960px-GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden houses on a stone-paved street, Gion", credit: "Josep M. Gracia · CC BY-SA 4.0 · Wikimedia Commons" }
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg/960px-%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Ōmon gate, in the stay's neighbourhood", credit: "KeraKera55 · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/JR_Tambaguchi_Station.jpg/960px-JR_Tambaguchi_Station.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "JR Tambaguchi Station", credit: "Laichuan Yinfu · CC BY-SA 3.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg/960px-Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Sumiyoshi Shrine, nearby", credit: "Molly Des Jardin · CC BY 2.0 · Wikimedia Commons" }
             ]
           }
         ]
@@ -1689,7 +1713,7 @@
         day: 12,
         date: "Sun Dec 6, 2026",
         title: "Kinosaki Onsen Coastal Day Trip from Kyoto",
-        base: "Base 3: Kyoto Higashiyama (Night 8 of 8)",
+        base: "Base 3: Hale Kyoto Tambaguchi (Night 8 of 8)",
         steps: [
           {
             name: "Kyoto Station",
@@ -1752,15 +1776,16 @@
             ]
           },
           {
-            name: "Higashiyama Base",
-            lat: 34.9986, lng: 135.7806,
+            name: "Hale Kyoto Tambaguchi (Airbnb)",
+            lat: 34.993, lng: 135.744,
             type: "hotel",
+            stay: "hale",
             desc: "Dinner back in Kyoto. Final night (Night 8) in Kyoto.",
             narrative: "Celebrate your final night in Kyoto with a relaxed dinner. Tomorrow morning: Shinkansen to Hakone for your private ryokan onsen stay!",
             images: [
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Ishibe_Alley_in_Kyoto_2015-03-19.jpg/960px-Ishibe_Alley_in_Kyoto_2015-03-19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji lane, Higashiyama", credit: "Tom Maisey · CC BY 2.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Ishibe_Koji_-_panoramio.jpg/960px-Ishibe_Koji_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji", credit: "Tomi Mäkitalo · CC BY-SA 3.0 · Wikimedia Commons" },
-              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg/960px-GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden houses on a stone-paved street, Gion", credit: "Josep M. Gracia · CC BY-SA 4.0 · Wikimedia Commons" }
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg/960px-%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Ōmon gate, in the stay's neighbourhood", credit: "KeraKera55 · CC BY-SA 4.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/JR_Tambaguchi_Station.jpg/960px-JR_Tambaguchi_Station.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "JR Tambaguchi Station", credit: "Laichuan Yinfu · CC BY-SA 3.0 · Wikimedia Commons" },
+              { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg/960px-Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Sumiyoshi Shrine, nearby", credit: "Molly Des Jardin · CC BY 2.0 · Wikimedia Commons" }
             ]
           }
         ]
@@ -1811,6 +1836,7 @@
             name: "Hakone Rotemburo Ryokan Base",
             lat: 35.2496, lng: 139.0478,
             type: "hotel",
+            stay: "hakone",
             desc: "Check in 15:00. Private open-air rotemburo bath, kaiseki dinner (Night 1).",
             narrative: "An authentic hot spring sanctuary in Hakone's forested volcanic valley. Stan & Alfiya unwind in private mineral-rich rotemburo baths and enjoy an exquisite seasonal kaiseki dinner.",
             images: [
@@ -1831,6 +1857,7 @@
             name: "Hakone Ryokan Base",
             lat: 35.2496, lng: 139.0478,
             type: "hotel",
+            stay: "hakone",
             desc: "Cable car to Sōunzan.",
             narrative: "Wake up to fresh mountain air, enjoy a traditional ryokan breakfast, and take the Hakone Tozan Cable Car ascending to Sōunzan.",
             images: [
@@ -1879,6 +1906,7 @@
             name: "Hakone Ryokan Base",
             lat: 35.2496, lng: 139.0478,
             type: "hotel",
+            stay: "hakone",
             desc: "Second evening private bath soak & kaiseki dinner (Night 2).",
             narrative: "Your second evening of pure relaxation: soak in your private outdoor rotemburo under the stars and savor a second bespoke kaiseki feast.",
             images: [
@@ -1911,6 +1939,7 @@
             name: "Shinjuku Hotel Base",
             lat: 35.6909, lng: 139.7003,
             type: "hotel",
+            stay: "shinjuku",
             desc: "Check in to 4-night skyscraper base.",
             narrative: "Check in to your final base: a modern skyscraper hotel in Shinjuku, Tokyo's premier entertainment, dining, and transit hub.",
             images: [
@@ -1947,6 +1976,7 @@
             name: "Shinjuku Base",
             lat: 35.6909, lng: 139.7003,
             type: "hotel",
+            stay: "shinjuku",
             desc: "Night 1 in Shinjuku.",
             narrative: "Night 1 of 4 at your Shinjuku hotel base, right in the center of Tokyo's energy.",
             images: [
@@ -1967,6 +1997,7 @@
             name: "Shinjuku Base",
             lat: 35.6909, lng: 139.7003,
             type: "hotel",
+            stay: "shinjuku",
             desc: "Marunouchi Line 16 min to Ginza.",
             narrative: "Take the direct Tokyo Metro Marunouchi Line from Shinjuku straight to Ginza for your cultural immersion morning.",
             images: [
@@ -2003,6 +2034,7 @@
             name: "Shinjuku Base",
             lat: 35.6909, lng: 139.7003,
             type: "hotel",
+            stay: "shinjuku",
             desc: "Night 2 in Shinjuku.",
             narrative: "Night 2 in Shinjuku. Grab a late bite or craft cocktails nearby.",
             images: [
@@ -2023,6 +2055,7 @@
             name: "Shinjuku Base",
             lat: 35.6909, lng: 139.7003,
             type: "hotel",
+            stay: "shinjuku",
             desc: "Morning train south to Kamakura.",
             narrative: "Board the JR Shonan-Shinjuku Line south from Shinjuku, traveling directly to the samurai seaside capital of Kamakura in under an hour.",
             images: [
@@ -2095,6 +2128,7 @@
             name: "Shinjuku Base",
             lat: 35.6909, lng: 139.7003,
             type: "hotel",
+            stay: "shinjuku",
             desc: "Night 3 in Shinjuku.",
             narrative: "Return to Shinjuku for a restful night.",
             images: [
@@ -2115,6 +2149,7 @@
             name: "Shinjuku Base",
             lat: 35.6909, lng: 139.7003,
             type: "hotel",
+            stay: "shinjuku",
             desc: "Relaxed open morning.",
             narrative: "Sleep in, enjoy a leisurely breakfast, and prepare for a relaxed final full day of souvenir shopping and architectural strolls in Tokyo.",
             images: [
@@ -2151,6 +2186,7 @@
             name: "Shinjuku Base",
             lat: 35.6909, lng: 139.7003,
             type: "hotel",
+            stay: "shinjuku",
             desc: "Final night in Japan.",
             narrative: "Final night in Japan. Pack luggage and prepare for tomorrow's departure flight.",
             images: [
@@ -2171,6 +2207,7 @@
             name: "Shinjuku Hotel Base",
             lat: 35.6909, lng: 139.7003,
             type: "hotel",
+            stay: "shinjuku",
             desc: "Relaxed morning. Leave Shinjuku ~13:55: Yamanote to Shinagawa, then Keikyu to HND T3.",
             narrative: "Check out smoothly. Catch the Yamanote Line to Shinagawa, then the Keikyu Airport line straight to Haneda Terminal 3 in comfortable time.",
             images: [
@@ -2195,13 +2232,71 @@
       }
     ];
 
+    // Booked accommodation details (booking numbers intentionally omitted)
+    const stays = {
+      monday: {
+        status: "Booked · JAPANiCAN",
+        property: "hotel MONday Asakusa",
+        address: "2-26-7 Asakusa, Taito-ku, Tokyo",
+        phone: "03-5830-8530",
+        checkin: "Wed Nov 25, 2026 · from 16:00",
+        checkout: "Fri Nov 27, 2026 · time not stated in booking",
+        nights: "2 nights",
+        room: "Standard Twin Room · 1 room · 2 adults · no meals",
+        price: "Pay on arrival: ¥42,382 (¥45,474 − ¥3,092 coupon; taxes/service incl.; accommodation/bath tax may be extra at property)",
+        cancellation: "JST: free until Tue Nov 24; from Nov 24: 50%; Nov 25: 100%. Changes count as cancellation + rebook.",
+        notes: ""
+      },
+      apa: {
+        status: "Booked · JAPANiCAN",
+        property: "APA Hotel Kanazawa Ekimae",
+        address: "1-9-28 Hirooka, Kanazawa (by Kanazawa Station, West Exit side)",
+        phone: "076-231-8111",
+        checkin: "Fri Nov 27, 2026 · time not stated in booking",
+        checkout: "Sun Nov 29, 2026 · time not stated in booking",
+        nights: "2 nights",
+        room: "Semi-double Room · 1 room · 2 adults · no meals",
+        price: "Pay on arrival: ¥47,858 (¥52,020 − ¥4,162 coupon; taxes/service incl.; accommodation tax may be extra)",
+        cancellation: "JST, as printed: 0% fee from Fri Nov 13; 100% on Fri Nov 27 (check-in day) / no-show.",
+        notes: "Station hotel, not the machiya in the plan draft. Semi-double = one ~120 cm bed for 2 (general APA room spec)."
+      },
+      hale: {
+        status: "Booked · Airbnb (entire home) · extended to 8 nights on Oct 31, 2026",
+        property: "Hale Kyoto Tambaguchi — king apartment, 182 sq ft",
+        address: "Nishishinyashiki Shimonocho, Shimogyo Ward, Kyoto 600-8829 (near Tambaguchi / Kyoto Station; ~25 min to Higashiyama). Exact address in the Airbnb app.",
+        phone: "Contact the host via the Airbnb app",
+        checkin: "Sun Nov 29, 2026 · after 15:00",
+        checkout: "Mon Dec 7, 2026 · time not stated in booking",
+        nights: "8 nights (originally 7; +1 night added Oct 31, 2026)",
+        room: "Entire home · king apartment · 1 bath inside the unit",
+        price: "Balance CA$995.97 scheduled for Nov 16, 2026 (card on file). Total stay price not stated; cost of the added night not recorded.",
+        cancellation: "Free cancellation before 15:00 Nov 24 (listing time); partial refund before 15:00 Nov 29.",
+        notes: "Bathroom is inside the unit per the listing (host asked on Nov 1 to confirm it is private; reply pending). Listed amenities: Wi-Fi, AC, TV, smoke alarm, fire extinguisher. No washer or dryer listed on Airbnb; AsiaYo lists a laundromat/drying machines for the property (unconfirmed). Nearest coin laundry: 582-3 Hanabatacho, ~600 m / ~8 min walk SE, open 05:00–01:00 daily."
+      },
+      hakone: {
+        status: "Not yet booked (as of Oct 30, 2026)",
+        property: "Hakone ryokan (to be booked)",
+        checkin: "Mon Dec 7, 2026",
+        checkout: "Wed Dec 9, 2026",
+        nights: "2 nights"
+      },
+      shinjuku: {
+        status: "Not yet booked (as of Oct 30, 2026)",
+        property: "Shinjuku hotel (to be booked)",
+        checkin: "Wed Dec 9, 2026",
+        checkout: "Sun Dec 13, 2026",
+        nights: "4 nights"
+      }
+    };
+
     // Master 5 Regional Bases
     const bases = [
       {
-        name: "Base 1: Asakusa, Tokyo (2n: Nov 25–26)",
-        lat: 35.7126, lng: 139.7966,
+        name: "Base 1: hotel MONday Asakusa (2n: Nov 25–26)",
+        lat: 35.7168, lng: 139.7944,
         type: "hotel",
-        desc: "Overnight Base 1: Historic low-city Tokyo near Sensō-ji.",
+        stay: "monday",
+        desc: "Overnight Base 1: hotel MONday Asakusa, 2-26-7 Asakusa. Check-in Nov 25 from 16:00 → check-out Nov 27.",
         narrative: "Your arrival anchor in old Tokyo's shitamachi district, providing quiet lantern-lit walks around Sensō-ji, direct airport subway links, and authentic dining.",
         images: [
           { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/Street_in_Asakusa_2025-04-22.jpg/960px-Street_in_Asakusa_2025-04-22.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Asakusa side street with Tokyo Skytree behind", credit: "1904.CC · CC BY 4.0 · Wikimedia Commons" },
@@ -2210,33 +2305,36 @@
         ]
       },
       {
-        name: "Base 2: Kanazawa Machiya (2n: Nov 27–28)",
-        lat: 36.5685, lng: 136.6575,
+        name: "Base 2: APA Hotel Kanazawa Ekimae (2n: Nov 27–28)",
+        lat: 36.5779, lng: 136.6468,
         type: "hotel",
-        desc: "Overnight Base 2: Authentic traditional wooden machiya townhouse in Kanazawa.",
-        narrative: "A private traditional machiya featuring cedar architecture, tsuboniwa gardens, and tatami living, perfectly situated between Kenroku-en and the geisha districts.",
+        stay: "apa",
+        desc: "Overnight Base 2: APA Hotel Kanazawa Ekimae, 1-9-28 Hirooka, by Kanazawa Station. Check-in Nov 27 → check-out Nov 29.",
+        narrative: "A station hotel beside Kanazawa Station (West Exit side), convenient for the Nohi Bus to Shirakawa-go and the onward train to Kyoto. Booked instead of the machiya in the plan draft.",
         images: [
-          { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Higashi_Chaya_District_%2850153813108%29.jpg/960px-Higashi_Chaya_District_%2850153813108%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden lattice facade, Higashi Chaya", credit: "Raita Futo from Tokyo, Japan · CC BY 2.0 · Wikimedia Commons" },
-          { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Kazuemachi_and_the_Asano_River_-_Kanazawa%2C_Japan_-_DSC00068.jpg/960px-Kazuemachi_and_the_Asano_River_-_Kanazawa%2C_Japan_-_DSC00068.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kazuemachi and the Asano River", credit: "Daderot · CC0 · Wikimedia Commons" },
-          { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/Kazuemachi_-_Kanazawa%2C_Japan_-_DSC00031.jpg/960px-Kazuemachi_-_Kanazawa%2C_Japan_-_DSC00031.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kazuemachi teahouse street", credit: "Daderot · CC0 · Wikimedia Commons" }
+          { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Cityscape_of_Kanazawa_Station_west_exit.jpg/960px-Cityscape_of_Kanazawa_Station_west_exit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kanazawa Station West Exit area (hotel side)", credit: "掬茶 · CC BY-SA 4.0 · Wikimedia Commons" },
+          { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/View_of_Kanazawa_Station_building_from_its_West_Exit.jpg/960px-View_of_Kanazawa_Station_building_from_its_West_Exit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kanazawa Station building from the West Exit", credit: "Tbatb · CC BY-SA 4.0 · Wikimedia Commons" },
+          { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/Scene_at_Kanazawa_Station_West_Exit_02.jpg/960px-Scene_at_Kanazawa_Station_West_Exit_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Kanazawa Station West Exit plaza", credit: "Tbatb · CC BY-SA 4.0 · Wikimedia Commons" }
         ]
       },
       {
-        name: "Base 3: Kyoto Higashiyama (8n: Nov 29–Dec 6)",
-        lat: 34.9986, lng: 135.7806,
+        name: "Base 3: Hale Kyoto Tambaguchi (8n: Nov 29–Dec 6)",
+        lat: 34.993, lng: 135.744,
         type: "hotel",
-        desc: "Overnight Base 3: Primary 8-night anchor in preserved Higashiyama district.",
-        narrative: "Stan & Alfiya's 8-night home in Kyoto. Walk right out onto stone-paved lanes of Ninenzaka and Sannenzaka, experiencing the ancient capital without bus crowds.",
+        stay: "hale",
+        desc: "Overnight Base 3: Hale Kyoto Tambaguchi (Airbnb, entire home), Shimogyo Ward near Tambaguchi / Kyoto Station. Check-in Nov 29 after 15:00 → check-out Dec 7.",
+        narrative: "Stan & Alfiya's 8-night home in Kyoto: an entire-home Airbnb near Tambaguchi and Kyoto Station, good for the Dec 5 Himeji, Dec 6 Kinosaki and Dec 7 Shinkansen days; about 25 minutes to Higashiyama.",
         images: [
-          { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Ishibe_Alley_in_Kyoto_2015-03-19.jpg/960px-Ishibe_Alley_in_Kyoto_2015-03-19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji lane, Higashiyama", credit: "Tom Maisey · CC BY 2.0 · Wikimedia Commons" },
-          { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Ishibe_Koji_-_panoramio.jpg/960px-Ishibe_Koji_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Ishibe-kōji", credit: "Tomi Mäkitalo · CC BY-SA 3.0 · Wikimedia Commons" },
-          { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg/960px-GIO_-_Traditional_wooden_houses_along_a_stone-paved_street_in_Gion%2C_Kyoto%2C_Japan%2C_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Wooden houses on a stone-paved street, Gion", credit: "Josep M. Gracia · CC BY-SA 4.0 · Wikimedia Commons" }
+          { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg/960px-%E5%B3%B6%E5%8E%9F%E5%A4%A7%E9%96%802.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Ōmon gate, in the stay's neighbourhood", credit: "KeraKera55 · CC BY-SA 4.0 · Wikimedia Commons" },
+          { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/JR_Tambaguchi_Station.jpg/960px-JR_Tambaguchi_Station.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "JR Tambaguchi Station", credit: "Laichuan Yinfu · CC BY-SA 3.0 · Wikimedia Commons" },
+          { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg/960px-Shimabara_Sumiyoshi_Shrine%2C_Kyoto_-_Jan_6%2C_2008.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail", caption: "Shimabara Sumiyoshi Shrine, nearby", credit: "Molly Des Jardin · CC BY 2.0 · Wikimedia Commons" }
         ]
       },
       {
-        name: "Base 4: Hakone Ryokan (2n: Dec 7–8)",
+        name: "Base 4: Hakone Ryokan (2n: Dec 7–8) — not yet booked",
         lat: 35.2496, lng: 139.0478,
         type: "hotel",
+        stay: "hakone",
         desc: "Overnight Base 4: Forested hot spring ryokan with private open-air rotemburo.",
         narrative: "Secluded in Hakone's volcanic cedar gorge. Relax in your private hot mineral rotemburo bath and indulge in nightly seasonal kaiseki dinners.",
         images: [
@@ -2246,9 +2344,10 @@
         ]
       },
       {
-        name: "Base 5: Shinjuku, Tokyo (4n: Dec 9–12)",
+        name: "Base 5: Shinjuku, Tokyo (4n: Dec 9–12) — not yet booked",
         lat: 35.6909, lng: 139.7003,
         type: "hotel",
+        stay: "shinjuku",
         desc: "Overnight Base 5: Modern skyscraper hotel in central Shinjuku.",
         narrative: "Your Tokyo skyscraper headquarters for the final 4 nights. Unrivaled access to Shibuya, Ginza, Kamakura, and vibrant local izakayas.",
         images: [
@@ -2459,11 +2558,34 @@
       // Google maps link
       drawerGmapsLink.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(poiData.name + ' ' + (poiData.locationHint || 'Japan'))}`;
 
+      // Booked stay details
+      renderStay(poiData.stay ? stays[poiData.stay] : null);
+
       // Build Carousel Slides
       buildCarouselSlides(currentCarouselImages);
 
       // Slide drawer into view
       poiDrawer.classList.add('open');
+    }
+
+    function renderStay(st) {
+      const card = document.getElementById('stayCard');
+      const rows = document.getElementById('stayRows');
+      rows.innerHTML = '';
+      if (!st) { card.style.display = 'none'; return; }
+      const fields = [
+        ['📌 Status:', st.status], ['🏨 Property:', st.property], ['📍 Address:', st.address], ['☎️ Phone:', st.phone],
+        ['🛬 Check-in:', st.checkin], ['🛫 Check-out:', st.checkout], ['🌙 Nights:', st.nights], ['🛏️ Room:', st.room],
+        ['💴 Price:', st.price], ['↩️ Cancellation:', st.cancellation], ['📝 Notes:', st.notes]
+      ];
+      fields.forEach(([label, val]) => {
+        if (!val) return;
+        const row = document.createElement('div'); row.className = 'detail-row';
+        const l = document.createElement('span'); l.className = 'detail-label'; l.textContent = label;
+        const v = document.createElement('span'); v.className = 'detail-val'; v.textContent = val;
+        row.appendChild(l); row.appendChild(v); rows.appendChild(row);
+      });
+      card.style.display = '';
     }
 
     function buildCarouselSlides(images) {
@@ -2543,6 +2665,7 @@
         lat: step.lat,
         lng: step.lng,
         images: step.images,
+        stay: step.stay,
         locationHint: dayData.base
       });
     }
@@ -2624,6 +2747,7 @@
         lat: b.lat,
         lng: b.lng,
         images: b.images,
+        stay: b.stay,
         locationHint: "Japan"
       });
     }
