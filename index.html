@@ -3,7 +3,7 @@
 <head>
   <meta name="robots" content="noindex, nofollow">
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Japan 2026: Stan & Alfiya — Master 19-Day Route Map</title>
   
   <!-- Leaflet CSS -->
@@ -658,6 +658,328 @@
         transform: translateY(0);
       }
     }
+
+    /* ================================================= */
+    /* MOBILE (iPhone) LAYOUT — phones only (≤768px)      */
+    /* ================================================= */
+    .m-only { display: none; }
+
+    @media (max-width: 768px) {
+      :root {
+        --sat: env(safe-area-inset-top, 0px);
+        --sab: env(safe-area-inset-bottom, 0px);
+        --sal: env(safe-area-inset-left, 0px);
+        --sar: env(safe-area-inset-right, 0px);
+        --topbar-h: calc(var(--sat) + 57px);
+        --sheet-h: calc(150px + var(--sab));
+      }
+      html, body { height: 100%; }
+      body {
+        display: block;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        font-size: 15px;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+        overscroll-behavior: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      input, select, textarea { font-size: 16px; }
+
+      #map {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+      }
+
+      /* ---- Compact top title bar ---- */
+      .header {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 1200;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: var(--topbar-h);
+        padding: calc(var(--sat) + 6px) calc(10px + var(--sar)) 6px calc(14px + var(--sal));
+        background: rgba(11, 17, 32, 0.92);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border-color);
+      }
+      .header .badge, .header .subtitle { display: none; }
+      .title {
+        flex: 1;
+        min-width: 0;
+        font-size: 15.5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .m-actions { display: flex; gap: 6px; flex-shrink: 0; }
+      .m-icon-btn {
+        min-width: 44px;
+        height: 44px;
+        padding: 0 10px;
+        border-radius: 12px;
+        border: 1px solid #475569;
+        background: #1e293b;
+        color: #f1f5f9;
+        font: 600 14px/1 'Plus Jakarta Sans', sans-serif;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        cursor: pointer;
+      }
+      .m-icon-btn[aria-pressed="true"] { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-blue); }
+
+      /* ---- Day list becomes a bottom sheet ---- */
+      #sidebar {
+        position: fixed;
+        left: 0; right: 0; bottom: 0;
+        width: 100%;
+        height: var(--sheet-h);
+        max-height: calc(100dvh - var(--topbar-h));
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        background: rgba(15, 23, 42, 0.98);
+        border-right: none;
+        border-top: 1px solid var(--border-color);
+        border-radius: 18px 18px 0 0;
+        box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.5);
+        padding: 0 var(--sar) var(--sab) var(--sal);
+        overflow: hidden;
+        transition: height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      #sidebar.m-dragging { transition: none; }
+      .controls { display: none; }
+
+      .m-sheet-top { display: block; flex-shrink: 0; }
+      .m-handle {
+        display: block;
+        height: 20px;
+        touch-action: none;
+        cursor: grab;
+        position: relative;
+      }
+      .m-handle::before {
+        content: "";
+        position: absolute;
+        left: 50%; top: 8px;
+        width: 40px; height: 5px;
+        margin-left: -20px;
+        border-radius: 3px;
+        background: #64748b;
+      }
+      .m-summary {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        column-gap: 10px;
+        width: 100%;
+        min-height: 48px;
+        padding: 0 16px 6px;
+        background: none;
+        border: none;
+        color: inherit;
+        text-align: left;
+        font: inherit;
+        touch-action: none;
+        cursor: pointer;
+      }
+      .m-sum-line1 { font-size: 13px; font-weight: 700; color: var(--accent-amber); }
+      .m-sum-line1 span { color: var(--text-muted); font-weight: 500; margin-left: 6px; }
+      .m-sum-title {
+        grid-column: 1;
+        font-size: 16px;
+        font-weight: 700;
+        color: #fff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .m-sum-chev {
+        grid-column: 2; grid-row: 1 / span 2;
+        width: 36px; height: 36px;
+        border-radius: 50%;
+        background: #1e293b;
+        border: 1px solid var(--border-color);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 16px; color: #cbd5e1;
+        transition: transform 0.25s;
+      }
+      #sidebar.sheet-full .m-sum-chev { transform: rotate(180deg); }
+
+      .m-chips {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 4px 12px 10px;
+        scroll-snap-type: x proximity;
+        touch-action: pan-x;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+      .m-chips::-webkit-scrollbar { display: none; }
+      .m-chip {
+        flex: 0 0 auto;
+        min-width: 60px;
+        height: 48px;
+        padding: 0 10px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-card);
+        color: #e2e8f0;
+        font: 700 14px/1.1 'Plus Jakarta Sans', sans-serif;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 2px;
+        scroll-snap-align: center;
+        cursor: pointer;
+      }
+      .m-chip small { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+      .m-chip.active { border-color: var(--accent-red); background: rgba(244, 63, 94, 0.2); color: #fff; }
+      .m-chip.active small { color: #fecdd3; }
+
+      .m-subtitle {
+        display: block;
+        flex-shrink: 0;
+        padding: 0 16px 8px;
+        font-size: 13px;
+        line-height: 1.45;
+        color: var(--text-muted);
+      }
+      .m-subtitle b { color: var(--accent-red); font-weight: 700; }
+      #sidebar.sheet-collapsed .m-subtitle,
+      #sidebar.sheet-collapsed .day-list { display: none; }
+
+      .day-list {
+        min-height: 0;
+        padding: 6px 12px 20px;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+      }
+      .day-card { padding: 14px; border-radius: 12px; }
+      .day-card:hover, .timeline-step:hover { transform: none; }
+      .day-number { font-size: 14px; }
+      .day-date { font-size: 13px; }
+      .day-title { font-size: 16px; }
+      .day-card div[style] { font-size: 13px !important; }
+      .timeline-step { min-height: 44px; padding: 8px; font-size: 14px; }
+      .step-idx { width: 24px; height: 24px; font-size: 12px; }
+      .step-desc { font-size: 13px; line-height: 1.4; }
+
+      /* ---- Legend behind a toggle ---- */
+      .map-legend {
+        display: none;
+        position: fixed;
+        top: calc(var(--topbar-h) + 8px);
+        left: calc(10px + var(--sal));
+        bottom: auto;
+        max-width: min(290px, calc(100vw - 84px));
+        font-size: 13px;
+        z-index: 1150;
+      }
+      body.m-legend-open .map-legend { display: block; }
+      .legend-title { font-size: 12px; }
+
+      /* ---- Leaflet controls ---- */
+      .leaflet-top { top: var(--topbar-h); }
+      .leaflet-right { right: var(--sar); }
+      .leaflet-left { left: var(--sal); }
+      .leaflet-bottom { bottom: var(--sheet-h); transition: bottom 0.3s; }
+      .leaflet-control-layers { display: none; }
+      body.m-layers-open .leaflet-control-layers { display: block; }
+      .leaflet-control-layers-expanded { font-size: 15px; padding: 8px 12px; }
+      .leaflet-control-layers-base label { padding: 6px 0; }
+      .leaflet-bar a, .leaflet-touch .leaflet-bar a {
+        width: 44px; height: 44px; line-height: 44px; font-size: 20px;
+      }
+      .leaflet-popup-content { font-size: 14px; }
+      .popup-title { font-size: 15px; }
+      .popup-desc { font-size: 13px; }
+      .popup-btn { min-height: 44px; padding: 10px 14px; font-size: 14px; }
+
+      /* ---- POI drawer becomes an 85dvh bottom sheet ---- */
+      .poi-drawer {
+        position: fixed;
+        left: 0; right: 0; bottom: 0; top: auto;
+        width: 100%;
+        height: 85vh;
+        height: 85dvh;
+        max-height: calc(100dvh - var(--sat) - 8px);
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+        border-radius: 18px 18px 0 0;
+        transform: translateY(105%);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .poi-drawer.open { transform: translateY(0); }
+      .poi-drawer.m-dragging { transition: none; }
+      .m-drawer-handle {
+        display: block;
+        flex-shrink: 0;
+        height: 26px;
+        touch-action: none;
+        position: relative;
+        cursor: grab;
+      }
+      .m-drawer-handle::before {
+        content: "";
+        position: absolute;
+        left: 50%; top: 10px;
+        width: 40px; height: 5px;
+        margin-left: -20px;
+        border-radius: 3px;
+        background: #64748b;
+      }
+      .drawer-content {
+        position: static;
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        padding: 2px calc(16px + var(--sar)) calc(88px + var(--sab)) calc(16px + var(--sal));
+        gap: 14px;
+      }
+      .drawer-close {
+        position: absolute;
+        top: auto;
+        bottom: calc(16px + var(--sab));
+        right: calc(16px + var(--sar));
+        width: 56px; height: 56px;
+        font-size: 28px;
+        background: rgba(30, 41, 59, 0.96);
+        color: #f1f5f9;
+        border-color: #475569;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55);
+        z-index: 20;
+      }
+      .drawer-close:hover { transform: none; }
+      .drawer-header { padding-right: 0; touch-action: none; }
+      .drawer-title { font-size: 19px; }
+      .drawer-subtitle { font-size: 13px; }
+      .drawer-badge { font-size: 11px; }
+      .carousel-container { height: 200px; flex-shrink: 0; touch-action: pan-y; }
+      .carousel-btn { width: 44px; height: 44px; font-size: 17px; }
+      .carousel-btn:hover { transform: translateY(-50%); }
+      .carousel-slide-caption { font-size: 13px; }
+      .carousel-counter { font-size: 12px; }
+      .photo-attribution { font-size: 12px !important; margin-top: -6px !important; }
+      .narrative-header { font-size: 13px; }
+      .narrative-text { font-size: 15px; }
+      .detail-row { flex-direction: column; gap: 2px; font-size: 14px; }
+      .detail-label { width: auto; }
+      .drawer-actions { padding-right: 68px; }
+      .btn-action-primary, .btn-action-secondary { min-height: 48px; font-size: 14px; }
+    }
   </style>
 </head>
 <body>
@@ -668,7 +990,22 @@
       <span class="badge">Master Plan (Oct 30 Revision)</span>
       <h1 class="title">Stan & Alfiya's Japan 2026</h1>
       <p class="subtitle">Booked: UA131 (HND In) / UA804 (HND Out 16:50) · 5 Bases · Kyoto 8n, Hakone 2n, Shinjuku 4n</p>
+      <div class="m-only m-actions">
+        <button type="button" class="m-icon-btn" id="mMacroBtn" aria-label="View complete macro corridor (5 regional bases)">🗺️</button>
+        <button type="button" class="m-icon-btn" id="mLegendBtn" aria-pressed="false" aria-label="Show map legend and layers">ⓘ Legend</button>
+      </div>
     </div>
+
+    <div class="m-only m-sheet-top" id="mSheetTop">
+      <div class="m-handle" id="mHandle" aria-hidden="true"></div>
+      <button type="button" class="m-summary" id="mSummary" aria-expanded="false" aria-label="Show or hide the day list">
+        <span class="m-sum-line1" id="mSumLine1"></span>
+        <span class="m-sum-title" id="mSumTitle"></span>
+        <span class="m-sum-chev" aria-hidden="true">⌃</span>
+      </button>
+      <div class="m-chips" id="mChips" role="tablist" aria-label="Days"></div>
+    </div>
+    <div class="m-only m-subtitle" id="mSubtitle"></div>
 
     <div class="controls">
       <button class="btn-all" onclick="showMacroOverview()">🗺️ View Complete Macro Corridor (5 Regional Bases)</button>
@@ -712,6 +1049,7 @@
 
   <!-- SLIDE-OUT POI CAROUSEL & NARRATIVE DRAWER -->
   <div id="poiDrawer" class="poi-drawer">
+    <div class="m-only m-drawer-handle" id="mDrawerHandle" aria-hidden="true"></div>
     <div class="drawer-content">
       <button class="drawer-close" onclick="closeDrawer()" title="Close details (Esc)">&times;</button>
       
@@ -2754,6 +3092,250 @@
 
     // Default to Day 11 (Himeji Castle Day Trip from Kyoto) on launch
     selectDay(11);
+  </script>
+  <script>
+    // ==========================================
+    // MOBILE (≤768px) BOTTOM-SHEET CONTROLLER — inactive on desktop
+    // ==========================================
+    (function () {
+      const mq = window.matchMedia('(max-width: 768px)');
+      const isMobile = () => mq.matches;
+      const root = document.documentElement;
+      const sidebar = document.getElementById('sidebar');
+      const header = document.querySelector('#sidebar .header');
+      const sheetTop = document.getElementById('mSheetTop');
+      const summary = document.getElementById('mSummary');
+      const handle = document.getElementById('mHandle');
+      const chips = document.getElementById('mChips');
+      const drawerEl = document.getElementById('poiDrawer');
+      const drawerHandle = document.getElementById('mDrawerHandle');
+      const STATES = ['collapsed', 'half', 'full'];
+      let sheetState = 'collapsed';
+      let currentDay = 11;
+      let inBounds = false;
+      let justDragged = false;
+
+      // Subtitle + badge tucked into the sheet
+      const badge = document.querySelector('#sidebar .header .badge');
+      const sub = document.querySelector('#sidebar .header .subtitle');
+      const mSub = document.getElementById('mSubtitle');
+      mSub.innerHTML = '';
+      const b = document.createElement('b'); b.textContent = badge ? badge.textContent : '';
+      mSub.appendChild(b); mSub.appendChild(document.createTextNode(' · ' + (sub ? sub.textContent : '')));
+
+      // Day chips
+      itinerary.forEach(d => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'm-chip';
+        btn.dataset.day = d.day;
+        const parts = d.date.replace(',', '').split(' ');
+        btn.innerHTML = `Day ${d.day}<small>${parts[1]} ${parts[2]}</small>`;
+        btn.addEventListener('click', () => selectDay(d.day));
+        chips.appendChild(btn);
+      });
+
+      const topbarH = () => header ? header.getBoundingClientRect().height : 0;
+      function heightFor(state) {
+        const vh = window.innerHeight;
+        const sab = parseFloat(getComputedStyle(sidebar).paddingBottom) || 0;
+        if (state === 'collapsed') return Math.round(sheetTop.getBoundingClientRect().height + sab + 1);
+        if (state === 'half') return Math.round(vh * 0.5);
+        return Math.round(vh - topbarH() - 4);
+      }
+      function applySheetHeight(h) {
+        sidebar.style.height = h + 'px';
+        root.style.setProperty('--sheet-h', h + 'px');
+      }
+      function setSheet(state) {
+        sheetState = state;
+        STATES.forEach(s => sidebar.classList.toggle('sheet-' + s, s === state));
+        applySheetHeight(heightFor(state));
+        summary.setAttribute('aria-expanded', state !== 'collapsed');
+      }
+      function obstruction() {
+        if (drawerEl.classList.contains('open')) return drawerEl.getBoundingClientRect().height;
+        return sidebar.getBoundingClientRect().height;
+      }
+
+      // Map framing that accounts for the top bar and the sheet
+      const protoFlyTo = L.Map.prototype.flyTo;
+      const protoFlyToBounds = L.Map.prototype.flyToBounds;
+      map.flyToBounds = function (bounds, opts) {
+        if (!isMobile()) return protoFlyToBounds.call(map, bounds, opts);
+        const o = Object.assign({}, opts || {});
+        delete o.padding;
+        o.paddingTopLeft = [24, topbarH() + 24];
+        o.paddingBottomRight = [24, obstruction() + 24];
+        inBounds = true;
+        try { return protoFlyToBounds.call(map, bounds, o); } finally { inBounds = false; }
+      };
+      map.flyTo = function (latlng, zoom, opts) {
+        if (isMobile() && !inBounds) {
+          const z = (zoom === undefined || zoom === null) ? map.getZoom() : zoom;
+          const pt = map.project(L.latLng(latlng), z);
+          const dy = (obstruction() - topbarH()) / 2;
+          latlng = map.unproject(pt.add([0, dy]), z);
+        }
+        return protoFlyTo.call(map, latlng, zoom, opts);
+      };
+
+      function refit() {
+        if (!isMobile()) return;
+        const layers = (currentDay === null ? macroLayer : activeMarkersLayer).getLayers().filter(l => l.getLatLng);
+        if (!layers.length) return;
+        const bounds = L.latLngBounds(layers.map(l => l.getLatLng()));
+        if (layers.length === 1) map.flyTo(bounds.getCenter(), 13, { duration: 0.6 });
+        else map.flyToBounds(bounds, { maxZoom: currentDay === null ? 8 : 14, duration: 0.6 });
+      }
+
+      function updateSummary() {
+        const l1 = document.getElementById('mSumLine1');
+        const t = document.getElementById('mSumTitle');
+        if (currentDay === null) {
+          l1.innerHTML = 'OVERVIEW<span>5 regional bases</span>';
+          t.textContent = 'Complete macro corridor';
+        } else {
+          const d = itinerary.find(x => x.day === currentDay);
+          l1.innerHTML = '';
+          l1.appendChild(document.createTextNode('DAY ' + d.day));
+          const s = document.createElement('span'); s.textContent = d.date; l1.appendChild(s);
+          t.textContent = d.title;
+        }
+        chips.querySelectorAll('.m-chip').forEach(c => {
+          const on = Number(c.dataset.day) === currentDay;
+          c.classList.toggle('active', on);
+          if (on && isMobile()) chips.scrollTo({ left: c.offsetLeft - chips.clientWidth / 2 + c.offsetWidth / 2, behavior: 'smooth' });
+        });
+      }
+
+      const origSelectDay = window.selectDay;
+      window.selectDay = function (n) { currentDay = n; origSelectDay(n); updateSummary(); };
+      const origMacro = window.showMacroOverview;
+      window.showMacroOverview = function () { currentDay = null; origMacro(); updateSummary(); };
+      const origClose = window.closeDrawer;
+      window.closeDrawer = function () { drawerEl.classList.remove('m-dragging'); drawerEl.style.transform = ''; origClose(); };
+
+      // Sheet: tap to cycle, drag to resize
+      function cycle() {
+        const next = { collapsed: 'half', half: 'full', full: 'collapsed' }[sheetState];
+        setSheet(next); setTimeout(refit, 320);
+      }
+      [summary, handle].forEach(el => {
+        let drag = null;
+        el.addEventListener('pointerdown', e => {
+          if (!isMobile()) return;
+          drag = { y: e.clientY, h: sidebar.getBoundingClientRect().height, moved: false };
+          try { el.setPointerCapture(e.pointerId); } catch (_) {}
+        });
+        el.addEventListener('pointermove', e => {
+          if (!drag) return;
+          const dy = e.clientY - drag.y;
+          if (!drag.moved && Math.abs(dy) > 6) { drag.moved = true; sidebar.classList.add('m-dragging'); }
+          if (drag.moved) {
+            const h = Math.max(heightFor('collapsed'), Math.min(heightFor('full'), drag.h - dy));
+            applySheetHeight(h);
+            sidebar.classList.toggle('sheet-collapsed', h <= heightFor('collapsed') + 8);
+          }
+        });
+        const end = () => {
+          if (!drag) return;
+          const d = drag; drag = null;
+          sidebar.classList.remove('m-dragging');
+          if (!d.moved) return;
+          justDragged = true; setTimeout(() => { justDragged = false; }, 50);
+          const h = sidebar.getBoundingClientRect().height;
+          const nearest = STATES.map(s => [s, Math.abs(heightFor(s) - h)]).sort((a, b) => a[1] - b[1])[0][0];
+          setSheet(nearest); setTimeout(refit, 320);
+        };
+        el.addEventListener('pointerup', end);
+        el.addEventListener('pointercancel', end);
+        el.addEventListener('click', () => { if (isMobile() && !justDragged) cycle(); });
+      });
+
+      // POI drawer: swipe down to close
+      [drawerHandle, document.querySelector('#poiDrawer .drawer-header')].forEach(el => {
+        let drag = null;
+        el.addEventListener('pointerdown', e => {
+          if (!isMobile() || !drawerEl.classList.contains('open')) return;
+          drag = { y: e.clientY, dy: 0 };
+          try { el.setPointerCapture(e.pointerId); } catch (_) {}
+        });
+        el.addEventListener('pointermove', e => {
+          if (!drag) return;
+          drag.dy = Math.max(0, e.clientY - drag.y);
+          if (drag.dy > 4) { drawerEl.classList.add('m-dragging'); drawerEl.style.transform = `translateY(${drag.dy}px)`; }
+        });
+        const end = () => {
+          if (!drag) return;
+          const dy = drag.dy; drag = null;
+          drawerEl.classList.remove('m-dragging');
+          if (dy > 90) closeDrawer(); else drawerEl.style.transform = '';
+        };
+        el.addEventListener('pointerup', end);
+        el.addEventListener('pointercancel', end);
+      });
+
+      // Carousel: horizontal swipe
+      const carousel = document.querySelector('#poiDrawer .carousel-container');
+      let sw = null;
+      carousel.addEventListener('pointerdown', e => {
+        if (!isMobile() || e.target.closest('button')) return;
+        sw = { x: e.clientX, y: e.clientY };
+      });
+      carousel.addEventListener('pointerup', e => {
+        if (!sw) return;
+        const dx = e.clientX - sw.x, dy = e.clientY - sw.y; sw = null;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) moveCarousel(dx < 0 ? 1 : -1);
+      });
+      carousel.addEventListener('pointercancel', () => { sw = null; });
+
+      // Top-bar chips: macro, legend, layers
+      const legendBtn = document.getElementById('mLegendBtn');
+      function setPopover(cls, btn, on) {
+        document.body.classList.toggle(cls, on);
+        btn.setAttribute('aria-pressed', on);
+        if (cls === 'm-layers-open') {
+          const lc = document.querySelector('.leaflet-control-layers');
+          if (lc) lc.classList.toggle('leaflet-control-layers-expanded', on);
+        }
+      }
+      document.getElementById('mMacroBtn').addEventListener('click', () => showMacroOverview());
+      // One toggle reveals both the legend and the layer switcher
+      const togglePopovers = on => { setPopover('m-legend-open', legendBtn, on); setPopover('m-layers-open', legendBtn, on); };
+      legendBtn.addEventListener('click', () => togglePopovers(!document.body.classList.contains('m-legend-open')));
+      map.on('click', () => { if (isMobile()) togglePopovers(false); });
+
+      function enterMobile() {
+        setSheet(sheetState);
+        updateSummary();
+        map.invalidateSize();
+        refit();
+      }
+      function leaveMobile() {
+        sidebar.style.height = '';
+        STATES.forEach(s => sidebar.classList.remove('sheet-' + s));
+        root.style.removeProperty('--sheet-h');
+        document.body.classList.remove('m-legend-open', 'm-layers-open');
+        const lc = document.querySelector('.leaflet-control-layers');
+        if (lc) lc.classList.remove('leaflet-control-layers-expanded');
+        drawerEl.style.transform = '';
+        map.invalidateSize();
+      }
+      const onChange = () => (isMobile() ? enterMobile() : leaveMobile());
+      if (mq.addEventListener) mq.addEventListener('change', onChange); else mq.addListener(onChange);
+      let rT;
+      window.addEventListener('resize', () => {
+        if (!isMobile()) return;
+        clearTimeout(rT);
+        rT = setTimeout(() => { setSheet(sheetState); map.invalidateSize(); }, 120);
+      });
+      if (isMobile()) {
+        enterMobile();
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (isMobile()) setSheet(sheetState); });
+      }
+      window.__mobileSheet = { setSheet, get state() { return sheetState; }, refit };
+    })();
   </script>
 </body>
 </html>
