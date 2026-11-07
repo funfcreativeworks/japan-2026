@@ -1144,12 +1144,99 @@
       attribution: 'Tiles &copy; Esri'
     });
 
+    // ==========================================
+    // GOOGLE MAP TILES (Map Tiles API, 2D tiles)
+    // Key restricted to https://funfcreativeworks.github.io/* and tile.googleapis.com only.
+    // Project japan-2026-maps-funf; daily cap 3,000 2D tiles (< 100k/month free tier).
+    // ==========================================
+    const GMAPS_TILE_KEY = 'AIzaSyCqYvW9jb-3a3e6wGKkghD5WC4yPfwxFDg';
+    const GMAPS_SESSIONS = {
+      roadmap:   { mapType: 'roadmap',   language: 'en-US', region: 'JP' },
+      satellite: { mapType: 'satellite', language: 'en-US', region: 'JP', layerTypes: ['layerRoadmap'] },
+      terrain:   { mapType: 'terrain',   language: 'en-US', region: 'JP', layerTypes: ['layerRoadmap'] }
+    };
+    const GMAPS_ATTR = 'Map data &copy;' + new Date().getFullYear() + ' Google';
+    const BLANK_TILE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+    function makeGoogleLayer() {
+      return L.tileLayer(BLANK_TILE, { maxZoom: 20, maxNativeZoom: 20, attribution: GMAPS_ATTR, tileSize: 256 });
+    }
+    const gRoadLayer = makeGoogleLayer();
+    const gSatLayer = makeGoogleLayer();
+    const gTerrainLayer = makeGoogleLayer();
+    const gLayers = { roadmap: gRoadLayer, satellite: gSatLayer, terrain: gTerrainLayer };
+
+    async function getGoogleSession(kind) {
+      const cacheKey = 'gmt_session_' + kind;
+      try {
+        const c = JSON.parse(localStorage.getItem(cacheKey) || 'null');
+        if (c && c.session && Number(c.expiry) * 1000 > Date.now() + 3600 * 1000) return c.session;
+      } catch (e) {}
+      const r = await fetch('https://tile.googleapis.com/v1/createSession?key=' + GMAPS_TILE_KEY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(GMAPS_SESSIONS[kind])
+      });
+      if (!r.ok) throw new Error('createSession ' + kind + ' HTTP ' + r.status);
+      const d = await r.json();
+      try { localStorage.setItem(cacheKey, JSON.stringify({ session: d.session, expiry: d.expiry })); } catch (e) {}
+      return d.session;
+    }
+
+    function initGoogleLayer(kind) {
+      return getGoogleSession(kind).then(session => {
+        gLayers[kind].setUrl('https://tile.googleapis.com/v1/2dtiles/{z}/{x}/{y}?session=' + session + '&key=' + GMAPS_TILE_KEY);
+        return true;
+      });
+    }
+
     const map = L.map('map', {
-      layers: [osmLayer],
+      layers: [gRoadLayer],
       zoomControl: false
     }).setView([35.6895, 137.5], 7);
 
+    // Fallback to OpenStreetMap if Google tiles are unavailable (quota hit, key/referrer error, offline)
+    function fallbackToOsm(reason) {
+      console.warn('[maps] Google tiles unavailable, falling back to OSM:', reason);
+      Object.values(gLayers).forEach(l => { if (map.hasLayer(l)) { map.removeLayer(l); if (!map.hasLayer(osmLayer)) map.addLayer(osmLayer); } });
+    }
+    let gTileErrors = 0;
+    Object.values(gLayers).forEach(l => l.on('tileerror', () => { if (++gTileErrors === 8) fallbackToOsm('repeated tile errors'); }));
+
+    initGoogleLayer('roadmap').catch(fallbackToOsm);
+    // Satellite/terrain sessions are created only when first selected (saves calls)
+    const gLazy = { satellite: false, terrain: false };
+    map.on('baselayerchange', e => {
+      for (const kind of ['satellite', 'terrain']) {
+        if (e.layer === gLayers[kind] && !gLazy[kind]) {
+          gLazy[kind] = true;
+          initGoogleLayer(kind).catch(fallbackToOsm);
+        }
+      }
+    });
+
+    // Google logo (required when displaying Google map tiles)
+    const GoogleLogo = L.Control.extend({
+      options: { position: 'bottomleft' },
+      onAdd: function () {
+        const d = L.DomUtil.create('div', 'gmaps-logo');
+        d.innerHTML = '<img src="https://maps.gstatic.com/mapfiles/api-3/images/google_white5.png" alt="Google" style="height:18px;display:block;">';
+        d.style.display = 'none';
+        return d;
+      }
+    });
+    const gLogo = new GoogleLogo().addTo(map);
+    function syncGoogleLogo() {
+      const on = Object.values(gLayers).some(l => map.hasLayer(l));
+      gLogo.getContainer().style.display = on ? 'block' : 'none';
+    }
+    map.on('baselayerchange layeradd layerremove', syncGoogleLogo);
+    syncGoogleLogo();
+
     L.control.layers({
+      "Google Maps": gRoadLayer,
+      "Google Satellite": gSatLayer,
+      "Google Terrain": gTerrainLayer,
       "OpenStreetMap (Clear)": osmLayer,
       "Esri Street": esriStreetLayer,
       "Esri Topographic (Alps)": esriTopoLayer,
